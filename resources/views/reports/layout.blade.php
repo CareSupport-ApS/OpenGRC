@@ -50,7 +50,7 @@
             color: #856404;
         }
 
-        .unknown, .notapplicable, .nottested {
+        .unknown, .notapplicable, .nottested, .notstarted {
             background-color: #f8d7da;
             color: #721c24;
         }
