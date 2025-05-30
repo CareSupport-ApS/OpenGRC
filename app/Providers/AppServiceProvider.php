@@ -79,14 +79,14 @@ class AppServiceProvider extends ServiceProvider
                     }
 
                     if ($storageDriver === 's3') {
-                        config()->set('filesystems.disks.s3', array_merge(config('filesystems.disks.s3', []), [
-                            'driver' => 's3',
-                            'key' => $s3Key,
-                            'secret' => $s3Secret,
-                            'region' => setting('storage.s3.region', 'us-east-1'),
-                            'bucket' => setting('storage.s3.bucket'),
-                            'use_path_style_endpoint' => false,
-                        ]));
+                        // config()->set('filesystems.disks.s3', array_merge(config('filesystems.disks.s3', []), [
+                        //     'driver' => 's3',
+                        //     'key' => $s3Key,
+                        //     'secret' => $s3Secret,
+                        //     'region' => setting('storage.s3.region', 'us-east-1'),
+                        //     'bucket' => setting('storage.s3.bucket'),
+                        //     'use_path_style_endpoint' => false,
+                        // ]));
                     }
                 }
 
@@ -109,7 +109,7 @@ class AppServiceProvider extends ServiceProvider
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['en','es','fr','hr']); 
+                ->locales(['en', 'es', 'fr', 'hr']);
         });
 
         FilamentColor::register([
@@ -139,7 +139,6 @@ class AppServiceProvider extends ServiceProvider
                 950 => '69, 10, 10',
             ],
         ]);
-
     }
 
     /**
