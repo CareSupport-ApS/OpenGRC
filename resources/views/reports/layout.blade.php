@@ -35,7 +35,7 @@
             background-color: #f9f9f9;
         }
 
-        .complete, .effective, .applicable{
+        .completed, .effective, .applicable{
             background-color: #d4edda;
             color: #155724;
         }
