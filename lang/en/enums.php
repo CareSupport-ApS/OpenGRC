@@ -84,4 +84,9 @@ return [
         'optional' => 'Optional',
         'other' => 'Other',
     ],
-]; 
+    'yes_no_na' => [
+        'yes' => 'Yes',
+        'no' => 'No',
+        'na' => 'N/A',
+    ],
+];

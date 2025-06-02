@@ -20,6 +20,7 @@ return [
         'permission' => 'Permissions',
         'data_request' => 'Data Requests',
         'implementation' => 'Implementations',
+        'vendor' => 'Vendors',
         'role' => 'Roles',
     ],
 
