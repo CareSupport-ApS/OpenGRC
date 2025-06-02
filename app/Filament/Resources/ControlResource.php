@@ -81,6 +81,12 @@ class ControlResource extends Resource
                     ->options(Standard::pluck('name', 'id')->toArray())
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.standard.tooltip'))
                     ->required(),
+                Forms\Components\Select::make('parent_control_id')
+                    ->label('Parent Control')
+                    ->options(Control::whereNull('parent_control_id')->pluck('title', 'id'))
+                    ->searchable()
+                    ->preload()
+                    ->nullable(),
                 Forms\Components\Select::make('enforcement')
                     ->options(ControlEnforcementCategory::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.enforcement.tooltip'))
@@ -119,8 +125,8 @@ class ControlResource extends Resource
             {
                 public function toHtml()
                 {
-                    return "<div class='fi-section-content p-6'>" . 
-                        __('control.table.description') . 
+                    return "<div class='fi-section-content p-6'>" .
+                        __('control.table.description') .
                         "</div>";
                 }
             })
@@ -212,8 +218,9 @@ class ControlResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\SubControlRelationManager::class,
             RelationManagers\ImplementationRelationManager::class,
-            RelationManagers\AuditItemRelationManager::class,
+            RelationManagers\AuditItemRelationManager::class
         ];
     }
 
@@ -232,7 +239,8 @@ class ControlResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->whereNull('parent_control_id');
     }
 
     public static function infolist(Infolist $infolist): Infolist
@@ -261,12 +269,12 @@ class ControlResource extends Resource
                             ->html(),
                         TextEntry::make('discussion')
                             ->columnSpanFull()
-                            ->hidden(fn (Control $record) => ! $record->discussion)
+                            ->hidden(fn(Control $record) => ! $record->discussion)
                             ->html(),
                         TextEntry::make('test')
                             ->label(__('control.infolist.test_plan'))
                             ->columnSpanFull()
-                            ->hidden(fn (Control $record) => ! $record->discussion)
+                            ->hidden(fn(Control $record) => ! $record->discussion)
                             ->html(),
                     ]),
             ]);

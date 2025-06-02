@@ -23,6 +23,10 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Illuminate\Database\Eloquent\Builder;
 
 class EditAuditItem extends EditRecord
 {
@@ -74,7 +78,6 @@ class EditAuditItem extends EditRecord
                     }
 
                     DataRequestResource::createResponses($dataRequest, $data['due_at']);
-
                 })
                 ->after(function () {
                     Notification::make()
@@ -113,6 +116,21 @@ class EditAuditItem extends EditRecord
         ];
     }
 
+    protected function subControlsList(AuditItem $record): string
+    {
+        $subs = $record->control?->subControls ?? [];
+        if ($subs instanceof \Illuminate\Support\Collection && $subs->isNotEmpty()) {
+            $list = '<ul class="list-disc ml-6">';
+            foreach ($subs as $sub) {
+                $list .= '<li>' . e($sub->code) . ' - ' . e($sub->title) . '</li>';
+            }
+            $list .= '</ul>';
+            return $list;
+        }
+
+        return 'None';
+    }
+
     public function form(Form $form): Form
     {
         return $form
@@ -121,20 +139,32 @@ class EditAuditItem extends EditRecord
                     ->schema([
                         Placeholder::make('control_code')
                             ->label('Code')
-                            ->content(fn (AuditItem $record): ?string => $record->auditable->code),
+                            ->content(fn(AuditItem $record): ?string => $record->auditable->code),
                         Placeholder::make('control_title')
                             ->label('Title')
-                            ->content(fn (AuditItem $record): ?string => $record->auditable->title),
+                            ->content(fn(AuditItem $record): ?string => $record->auditable->title),
                         Placeholder::make('control_desc')
                             ->label('Description')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString(optional($record->auditable)->description ?? ''))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString(optional($record->auditable)->description ?? ''))
                             ->columnSpanFull(),
                         Placeholder::make('control_discussion')
                             ->label('Discussion')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString(optional($record->auditable)->discussion ?? ''))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString(optional($record->auditable)->discussion ?? ''))
+                            ->hidden(fn(AuditItem $record) => empty($record->auditable->discussion))
                             ->columnSpanFull(),
 
+                        Placeholder::make('sub_controls_table')
+                            ->label('Sub-Controls')
+                            ->content(function () {
+                                return new \Illuminate\Support\HtmlString(
+                                    view('tables.controls-table', [
+                                        'controls' => $this->record->auditable?->subControls ?? collect(),
+                                    ])->render()
+                                );
+                            })
+                            ->columnSpanFull()
                     ])->columns(2)->collapsible(true),
+
 
                 Forms\Components\Section::make('Evaluation')
                     ->schema([
