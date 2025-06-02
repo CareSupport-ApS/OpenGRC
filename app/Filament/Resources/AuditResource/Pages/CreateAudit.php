@@ -132,6 +132,7 @@ class CreateAudit extends CreateRecord
 
                                 if ($audit_type == 'standards') {
                                     $controls = Control::where('standard_id', '=', $standard_id)
+                                        ->whereNull('parent_control_id')
                                         ->get()
                                         ->mapWithKeys(function ($control) {
                                             return [$control->id => $control->code.' - '.$control->title];
@@ -148,6 +149,7 @@ class CreateAudit extends CreateRecord
                                     if ($program_id) {
                                         $program = Program::find($program_id);
                                         $controls = $program->getAllControls()
+                                            ->whereNull('parent_control_id')
                                             ->mapWithKeys(function ($control) {
                                                 return [$control->id => $control->code.' - '.$control->title];
                                             });

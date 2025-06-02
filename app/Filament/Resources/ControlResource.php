@@ -81,6 +81,12 @@ class ControlResource extends Resource
                     ->options(Standard::pluck('name', 'id')->toArray())
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.standard.tooltip'))
                     ->required(),
+                Forms\Components\Select::make('parent_control_id')
+                    ->label('Parent Control')
+                    ->options(Control::whereNull('parent_control_id')->pluck('title', 'id'))
+                    ->searchable()
+                    ->preload()
+                    ->nullable(),
                 Forms\Components\Select::make('enforcement')
                     ->options(ControlEnforcementCategory::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.enforcement.tooltip'))
@@ -214,6 +220,7 @@ class ControlResource extends Resource
         return [
             RelationManagers\ImplementationRelationManager::class,
             RelationManagers\AuditItemRelationManager::class,
+            RelationManagers\SubControlRelationManager::class,
         ];
     }
 
@@ -232,7 +239,8 @@ class ControlResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->whereNull('parent_control_id');
     }
 
     public static function infolist(Infolist $infolist): Infolist

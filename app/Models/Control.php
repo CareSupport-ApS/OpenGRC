@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -73,6 +74,7 @@ class Control extends Model
         'type' => ControlType::class,
         'category' => ControlCategory::class,
         'enforcement' => ControlEnforcementCategory::class,
+        'parent_control_id' => 'integer',
     ];
 
     /**
@@ -97,6 +99,22 @@ class Control extends Model
     public function standard(): BelongsTo
     {
         return $this->belongsTo(Standard::class);
+    }
+
+    /**
+     * Get the parent control if this control is a sub-control.
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_control_id');
+    }
+
+    /**
+     * Get the sub-controls for this control.
+     */
+    public function subControls(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_control_id');
     }
 
     /**

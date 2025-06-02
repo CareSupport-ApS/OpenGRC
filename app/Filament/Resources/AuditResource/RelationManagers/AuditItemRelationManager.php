@@ -40,6 +40,10 @@ class AuditItemRelationManager extends RelationManager
                             ->label('Control Discussion')
                             ->content(fn (AuditItem $record): HtmlString => new HtmlString(optional($record->control)->discussion ?? ''))
                             ->columnSpanFull(),
+                        Placeholder::make('sub_controls')
+                            ->label('Sub Controls')
+                            ->content(fn (AuditItem $record): HtmlString => new HtmlString($this->subControlsList($record)))
+                            ->columnSpanFull(),
 
                     ])->columns(2)->collapsible(true),
 
@@ -166,6 +170,21 @@ class AuditItemRelationManager extends RelationManager
 
         // Return the generated HTML as an HtmlString
         return new HtmlString($html);
+    }
+
+    protected function subControlsList(AuditItem $record): string
+    {
+        $subs = $record->control?->subControls ?? [];
+        if ($subs instanceof \Illuminate\Support\Collection && $subs->isNotEmpty()) {
+            $list = '<ul class="list-disc ml-6">';
+            foreach ($subs as $sub) {
+                $list .= '<li>'.e($sub->code).' - '.e($sub->title).'</li>';
+            }
+            $list .= '</ul>';
+            return $list;
+        }
+
+        return 'None';
     }
 
     public function table(Table $table): Table
