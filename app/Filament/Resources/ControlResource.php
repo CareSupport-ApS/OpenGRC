@@ -125,8 +125,8 @@ class ControlResource extends Resource
             {
                 public function toHtml()
                 {
-                    return "<div class='fi-section-content p-6'>" . 
-                        __('control.table.description') . 
+                    return "<div class='fi-section-content p-6'>" .
+                        __('control.table.description') .
                         "</div>";
                 }
             })
@@ -218,9 +218,9 @@ class ControlResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\ImplementationRelationManager::class,
-            RelationManagers\AuditItemRelationManager::class,
             RelationManagers\SubControlRelationManager::class,
+            RelationManagers\ImplementationRelationManager::class,
+            RelationManagers\AuditItemRelationManager::class
         ];
     }
 
@@ -269,12 +269,12 @@ class ControlResource extends Resource
                             ->html(),
                         TextEntry::make('discussion')
                             ->columnSpanFull()
-                            ->hidden(fn (Control $record) => ! $record->discussion)
+                            ->hidden(fn(Control $record) => ! $record->discussion)
                             ->html(),
                         TextEntry::make('test')
                             ->label(__('control.infolist.test_plan'))
                             ->columnSpanFull()
-                            ->hidden(fn (Control $record) => ! $record->discussion)
+                            ->hidden(fn(Control $record) => ! $record->discussion)
                             ->html(),
                     ]),
             ]);

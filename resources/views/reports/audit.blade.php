@@ -135,8 +135,28 @@
                 </tr>
                 <tr>
                     <td>Control</td>
-                    <td colspan="3">{{ $item->auditable->code }} {{ $item->auditable->title }}
+                    <td colspan="3">{{ $item->auditable->title }}
                         <br>{!! $item->auditable->description !!}</td>
+                </tr>
+                 <tr>
+                    <td>Sub-controls</td>
+                    <td colspan="3">
+                        <ul>
+                             @foreach($item->auditable->subControls as $subControl)
+                             <li>
+                             {!!  $subControl->code  !!}
+                            {!!  $subControl->title  !!}
+                            <br>{!!  $subControl->description  !!}
+                              </li>
+                        @endforeach
+                           
+                                
+                          
+                        </ul>
+                       
+
+
+                    </td>
                 </tr>
                 <tr>
                     <td>Auditor Notes</td>
