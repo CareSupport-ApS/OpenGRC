@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Attachment;
+use App\Models\PersonalDataEntry;
 
 class System extends Model
 {
@@ -25,5 +26,10 @@ class System extends Model
     public function attachments(): MorphMany
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    public function personalDataEntries(): MorphMany
+    {
+        return $this->morphMany(PersonalDataEntry::class, 'processable');
     }
 }
