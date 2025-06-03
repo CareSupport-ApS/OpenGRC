@@ -21,6 +21,7 @@ return [
         'data_request' => 'Data Requests',
         'implementation' => 'Implementations',
         'vendor' => 'Vendors',
+        'system' => 'Systems',
         'role' => 'Roles',
     ],
 

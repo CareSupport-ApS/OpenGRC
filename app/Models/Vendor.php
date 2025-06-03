@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Enums\YesNoNa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use App\Models\System;
 
 class Vendor extends Model
 {
@@ -53,4 +56,9 @@ class Vendor extends Model
         'dpa_collected' => YesNoNa::class,
         'privacy_policy_collected' => YesNoNa::class,
     ];
+
+    public function systems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(System::class);
+    }
 }
