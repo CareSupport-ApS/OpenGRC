@@ -21,6 +21,7 @@ return [
         'data_request' => 'Solicitudes de Datos',
         'implementation' => 'Implementaciones',
         'role' => 'Roles',
+        'vendor' => 'Vendors',
     ],
 
     // Menu Items

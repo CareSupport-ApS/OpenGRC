@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models;
+
+use App\Enums\VendorType;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Vendor extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $casts = [
+        'id' => 'integer',
+        'engagement_date' => 'date',
+        'vendor_type' => VendorType::class,
+        'is_data_processor' => 'boolean',
+        'has_dpa' => 'boolean',
+    ];
+
+    protected $fillable = [
+        'name',
+        'description',
+        'engagement_date',
+        'internal_owner_name',
+        'internal_owner_email',
+        'internal_owner_role',
+        'business_area',
+        'vendor_type',
+        'is_data_processor',
+        'has_dpa',
+        'key_contact_name',
+        'key_contact_email',
+        'key_contact_role',
+    ];
+}

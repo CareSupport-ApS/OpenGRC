@@ -21,6 +21,7 @@ return [
         'data_request' => 'Zahtjevi za Podacima',
         'implementation' => 'Implementacije',
         'role' => 'Uloge',
+        'vendor' => 'Vendors',
     ],
 
     // Menu Items
