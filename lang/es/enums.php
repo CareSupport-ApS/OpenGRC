@@ -83,4 +83,9 @@ return [
         'optional' => 'Opcional',
         'other' => 'Otro',
     ],
-]; 
+    'vendor_type' => [
+        'consultant' => 'Consultant',
+        'service_provider' => 'Service Provider',
+        'it_system_provider' => 'IT System Provider',
+    ],
+];
