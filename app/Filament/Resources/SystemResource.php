@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SystemResource\Pages;
 use App\Models\System;
 use App\Models\Vendor;
+use App\Filament\Resources\SystemResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -112,6 +113,13 @@ class SystemResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\AttachmentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

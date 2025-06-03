@@ -133,6 +133,7 @@ class VendorResource extends Resource
     {
         return [
             RelationManagers\SystemsRelationManager::class,
+            RelationManagers\AttachmentsRelationManager::class,
         ];
     }
 
