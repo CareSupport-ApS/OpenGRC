@@ -7,6 +7,7 @@ use App\Models\System;
 use App\Models\Vendor;
 use App\Filament\Resources\SystemResource\RelationManagers;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -45,7 +46,6 @@ class SystemResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->columns(2)
             ->schema([
                 Forms\Components\Section::make('General Information')
                     ->columns(3)
