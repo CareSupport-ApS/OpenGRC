@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('file_name');
             $table->string('file_path');
             $table->string('file_size')->nullable();
             $table->unsignedBigInteger('uploaded_by')->nullable();

@@ -14,9 +14,10 @@ return [
         'vendor' => 'Vendor',
         'description' => 'Description',
         'logo_url' => 'Logo URL',
-        'system_document_link' => 'System Document Link',
+        'system_document_link' => 'System Documentation Link',
         'security_password_policy_compliant' => 'Password Policy Compliant',
         'security_sso_connected' => 'SSO Connected',
+        'data_storage' => 'Data Storage',
     ],
     'table' => [
         'columns' => [
@@ -24,6 +25,7 @@ return [
             'vendor' => 'Vendor',
             'security_password_policy_compliant' => 'Password Policy',
             'security_sso_connected' => 'SSO',
+            'data_storage' => 'Data Storage',
         ],
     ],
 ];

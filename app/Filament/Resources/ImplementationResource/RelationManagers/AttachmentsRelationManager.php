@@ -9,6 +9,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AttachmentsRelationManager extends RelationManager
 {
@@ -22,13 +23,21 @@ class AttachmentsRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('file_path')
-                    ->preserveFilenames()
-                    ->disk('private')
-                    ->directory(fn() => 'attachments/'.Carbon::now()->timestamp.'-'.Str::random(2))
                     ->downloadable()
-                    ->visibility('private')
+                    ->columnSpanFull()
+                    ->label('File')
+                    ->required()
                     ->openable()
-                    ->required(),
+                    ->disk(config('filesystems.default'))
+                    ->directory('implementation-attachments')
+                    ->visibility('private')
+                    ->preserveFilenames()
+                    ->storeFileNamesIn('file_name')
+                    ->deleteUploadedFileUsing(function ($state) {
+                        if ($state) {
+                            Storage::disk(config('filesystems.default'))->delete($state);
+                        }
+                    }),
             ]);
     }
 

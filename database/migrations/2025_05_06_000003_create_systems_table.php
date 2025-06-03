@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\DataStorageType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,8 @@ return new class extends Migration
             $table->string('title');
             $table->foreignId('vendor_id')->nullable()->constrained('vendors')->nullOnDelete();
             $table->longText('description')->nullable();
-            $table->string('logo_url')->nullable();
-            $table->string('system_document_link')->nullable();
+            $table->string('system_documentation_link')->nullable();
+            $table->json('data_storage')->nullable();
             $table->boolean('security_password_policy_compliant')->default(false);
             $table->boolean('security_sso_connected')->default(false);
             $table->softDeletes();

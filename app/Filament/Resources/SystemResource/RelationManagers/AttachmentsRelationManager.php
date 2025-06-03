@@ -9,6 +9,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AttachmentsRelationManager extends RelationManager
 {
@@ -18,17 +19,24 @@ class AttachmentsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
+                Forms\Components\TextInput::make('file_name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('file_path')
-                    ->preserveFilenames()
-                    ->disk('private')
-                    ->directory(fn() => 'attachments/'.Carbon::now()->timestamp.'-'.Str::random(2))
                     ->downloadable()
-                    ->visibility('private')
+                    ->columnSpanFull()
+                    ->label('File')
+                    ->required()
                     ->openable()
-                    ->required(),
+                    ->disk(config('filesystems.default'))
+                    ->directory('system-attachments')
+                    ->visibility('private')
+                    ->preserveFilenames()
+                    ->deleteUploadedFileUsing(function ($state) {
+                        if ($state) {
+                            Storage::disk(config('filesystems.default'))->delete($state);
+                        }
+                    }),
             ]);
     }
 
@@ -36,10 +44,12 @@ class AttachmentsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                Tables\Columns\TextColumn::make('file_name')
+                    ->label('File')
+                    ->url(fn($record) => route('priv-storage', ['filepath' => $record->file_path]))
+                    ->openUrlInNewTab() // optional: keeps user on current page
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('file_path'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
@@ -48,7 +58,7 @@ class AttachmentsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

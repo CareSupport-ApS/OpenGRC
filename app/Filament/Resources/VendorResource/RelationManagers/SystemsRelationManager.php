@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\VendorResource\RelationManagers;
 
+use App\Filament\Resources\SystemResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -29,7 +30,7 @@ class SystemsRelationManager extends RelationManager
                     ->relationship('vendor', 'name')
                     ->searchable()
                     ->preload()
-                    ->default(fn (RelationManager $livewire) => $livewire->getOwnerRecord()->id),
+                    ->default(fn(RelationManager $livewire) => $livewire->getOwnerRecord()->id),
                 Forms\Components\Textarea::make('description')
                     ->label(__('system.form.description'))
                     ->columnSpanFull(),
@@ -67,8 +68,8 @@ class SystemsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make()->url(fn($record) => SystemResource::getUrl('view', ['record' => $record])),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
