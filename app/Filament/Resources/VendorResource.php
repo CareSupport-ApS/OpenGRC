@@ -33,11 +33,6 @@ class VendorResource extends Resource
         return __('vendor.navigation.label');
     }
 
-    public static function getNavigationGroup(): string
-    {
-        return __('vendor.navigation.group');
-    }
-
     public static function getModelLabel(): string
     {
         return __('vendor.model.label');
@@ -82,7 +77,11 @@ class VendorResource extends Resource
                     ->columns(3)
                     ->schema([
                         Forms\Components\Toggle::make('is_data_processor'),
+                        Forms\Components\Toggle::make('is_personal_data_processor'),
+                        Forms\Components\Toggle::make('is_critical_business_data_processor'),
+                        Forms\Components\Toggle::make('gdpr_compliant'),
                         Forms\Components\Toggle::make('has_dpa'),
+                        Forms\Components\Toggle::make('has_contract'),
                     ]),
 
                 Forms\Components\Section::make('Key Contact')
@@ -111,6 +110,10 @@ class VendorResource extends Resource
                     ->boolean(),
                 Tables\Columns\IconColumn::make('has_dpa')
                     ->boolean(),
+                Tables\Columns\IconColumn::make('is_personal_data_processor')->boolean(),
+                Tables\Columns\IconColumn::make('is_critical_business_data_processor')->boolean(),
+                Tables\Columns\IconColumn::make('gdpr_compliant')->boolean(),
+                Tables\Columns\IconColumn::make('has_contract')->boolean(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('vendor_type')
@@ -133,6 +136,7 @@ class VendorResource extends Resource
     {
         return [
             RelationManagers\SystemsRelationManager::class,
+            RelationManagers\AttachmentsRelationManager::class,
         ];
     }
 

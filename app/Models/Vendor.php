@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Attachment;
 use App\Models\System;
 
 class Vendor extends Model
@@ -40,5 +42,10 @@ class Vendor extends Model
     public function systems(): HasMany
     {
         return $this->hasMany(System::class);
+    }
+
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }

@@ -20,7 +20,11 @@ return new class extends Migration
             $table->string('business_area')->nullable();
             $table->enum('vendor_type', array_column(VendorType::cases(), 'value'))->default(VendorType::SERVICE_PROVIDER->value);
             $table->boolean('is_data_processor')->default(false);
+            $table->boolean('is_personal_data_processor')->default(false);
+            $table->boolean('is_critical_business_data_processor')->default(false);
+            $table->boolean('gdpr_compliant')->default(false);
             $table->boolean('has_dpa')->default(false);
+            $table->boolean('has_contract')->default(false);
             $table->string('key_contact_name')->nullable();
             $table->string('key_contact_email')->nullable();
             $table->string('key_contact_role')->nullable();
