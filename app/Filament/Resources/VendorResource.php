@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\VendorType;
 use App\Filament\Resources\VendorResource\Pages;
+use App\Filament\Resources\VendorResource\RelationManagers;
 use App\Models\Vendor;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -126,6 +127,13 @@ class VendorResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\SystemsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

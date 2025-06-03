@@ -22,6 +22,7 @@ return [
         'implementation' => 'Implementations',
         'role' => 'Roles',
         'vendor' => 'Vendors',
+        'system' => 'Systems',
     ],
 
     // Menu Items
