@@ -6,6 +6,7 @@ use App\Filament\Resources\SystemResource\Pages;
 use App\Models\System;
 use App\Models\Vendor;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -48,34 +49,42 @@ class SystemResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->columns(2)
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->label(__('system.form.title'))
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('vendor_id')
-                    ->label(__('system.form.vendor'))
-                    ->options(Vendor::pluck('name', 'id'))
-                    ->searchable()
-                    ->preload()
-                    ->nullable(),
-                Forms\Components\Textarea::make('description')
-                    ->label(__('system.form.description'))
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('logo_url')
-                    ->label(__('system.form.logo_url'))
-                    ->maxLength(255)
-                    ->nullable(),
-                Forms\Components\TextInput::make('system_document_link')
-                    ->label(__('system.form.system_document_link'))
-                    ->maxLength(255)
-                    ->nullable(),
-                Forms\Components\Toggle::make('security_password_policy_compliant')
-                    ->label(__('system.form.security_password_policy_compliant')),
-                Forms\Components\Toggle::make('security_sso_connected')
-                    ->label(__('system.form.security_sso_connected')),
+                Section::make(__('System'))
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label(__('system.form.title'))
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Select::make('vendor_id')
+                            ->label(__('system.form.vendor'))
+                            ->options(Vendor::pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->nullable(),
+                        Forms\Components\Textarea::make('description')
+                            ->label(__('system.form.description'))
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('logo_url')
+                            ->label(__('system.form.logo_url'))
+                            ->maxLength(255)
+                            ->nullable(),
+                        Forms\Components\TextInput::make('system_document_link')
+                            ->label(__('system.form.system_document_link'))
+                            ->maxLength(255)
+                            ->nullable(),
+
+                    ]),
+                Forms\Components\Section::make('Security')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Toggle::make('security_password_policy_compliant')
+                            ->label(__('system.form.security_password_policy_compliant')),
+                        Forms\Components\Toggle::make('security_sso_connected')
+                            ->label(__('system.form.security_sso_connected')),
+
+                    ]),
             ]);
     }
 
