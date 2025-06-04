@@ -80,13 +80,13 @@ class CreateAudit extends CreateRecord
                         ->columns(1)
                         ->searchable()
                         ->native(false)
-                        ->visible(fn (Get $get) => $get('audit_type') == 'standards'),
+                        ->visible(fn(Get $get) => $get('audit_type') == 'standards'),
                     Select::make('program_id')
                         ->label('Program to Audit')
                         ->relationship('program', 'name')
                         ->searchable()
                         ->preload()
-                        ->visible(fn (Get $get) => $get('audit_type') == 'program'),
+                        ->visible(fn(Get $get) => $get('audit_type') == 'program'),
                 ]),
 
             Step::make('Basic Information')
@@ -104,7 +104,7 @@ class CreateAudit extends CreateRecord
                         ->hint('Who will be managing this audit?')
                         ->options(User::query()->pluck('name', 'id')->toArray())
                         ->columns(1)
-                        ->default(fn () => auth()->id())
+                        ->default(fn() => auth()->id())
                         ->searchable(),
                     Textarea::make('description')
                         ->maxLength(65535)
@@ -135,13 +135,13 @@ class CreateAudit extends CreateRecord
                                         ->whereNull('parent_control_id')
                                         ->get()
                                         ->mapWithKeys(function ($control) {
-                                            return [$control->id => $control->code.' - '.$control->title];
+                                            return [$control->id => $control->code . ' - ' . $control->title];
                                         });
                                 } elseif ($audit_type == 'implementations') {
                                     $controls = Implementation::query()
                                         ->get()
                                         ->mapWithKeys(function ($implementation) {
-                                            return [$implementation->id => $implementation->code.' - '.$implementation->title];
+                                            return [$implementation->id => $implementation->code . ' - ' . $implementation->title];
                                         })
                                         ->toArray();
                                 } elseif ($audit_type == 'program') {
@@ -151,7 +151,7 @@ class CreateAudit extends CreateRecord
                                         $controls = $program->getAllControls()
                                             ->whereNull('parent_control_id')
                                             ->mapWithKeys(function ($control) {
-                                                return [$control->id => $control->code.' - '.$control->title];
+                                                return [$control->id => $control->code . ' - ' . $control->title];
                                             });
                                     } else {
                                         $controls = [];
@@ -169,7 +169,8 @@ class CreateAudit extends CreateRecord
                                         ->default(! is_array($controls) ? $controls->toArray() : $controls)
                                         ->required(),
                                 ];
-                            }),
+                            }
+                        ),
                 ]),
 
         ];
@@ -199,9 +200,7 @@ class CreateAudit extends CreateRecord
                         break;
                 }
                 $audit_item->save();
-
             }
         }
-
     }
 }
