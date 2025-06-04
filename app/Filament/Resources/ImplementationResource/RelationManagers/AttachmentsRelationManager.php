@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class AttachmentsRelationManager extends RelationManager
 {
@@ -31,8 +32,9 @@ class AttachmentsRelationManager extends RelationManager
                     ->disk(config('filesystems.default'))
                     ->directory('implementation-attachments')
                     ->visibility('private')
-                    ->preserveFilenames()
-                    ->storeFileNamesIn('file_name')
+                    ->storeFileNamesUsing(function (TemporaryUploadedFile $file) {
+                        return Str::random(40) . '.' . $file->getClientOriginalExtension();
+                    })
                     ->deleteUploadedFileUsing(function ($state) {
                         if ($state) {
                             Storage::disk(config('filesystems.default'))->delete($state);
