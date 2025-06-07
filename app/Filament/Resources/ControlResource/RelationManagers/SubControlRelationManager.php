@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SubControlRelationManager extends RelationManager
 {
@@ -75,11 +76,11 @@ class SubControlRelationManager extends RelationManager
                         $data['standard_id'] = $owner->standard_id;
                         $data['parent_control_id'] = $owner->id;
                         return Control::create($data);
-                    }),
+                    })
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()->hiddenLabel(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->hiddenLabel()->slideOver(),
+                Tables\Actions\EditAction::make()->slideOver(),
                 Tables\Actions\DeleteAction::make(),
             ]);
     }

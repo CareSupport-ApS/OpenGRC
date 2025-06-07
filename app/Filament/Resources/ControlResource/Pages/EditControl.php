@@ -30,12 +30,16 @@ class EditControl extends EditRecord
         return [];
     }
 
-    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
+    protected function getRedirectUrl(): string
     {
-        parent::save($shouldRedirect);
+        $record = $this->record;
 
-        if ($shouldRedirect) {
-            $this->redirect($this->getResource()::getUrl('view', ['record' => $this->record]));
+        // If a parent_control_id exists, redirect to the parent's view page
+        if ($record->parent_control_id) {
+            return ControlResource::getUrl('view', ['record' => $record->parent_control_id]);
         }
+
+        // Default redirect (e.g. stay on the same record)
+        return ControlResource::getUrl('view', ['record' => $record]);
     }
 }
