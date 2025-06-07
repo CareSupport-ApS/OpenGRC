@@ -60,7 +60,7 @@ class SubControlRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->defaultSort('code', 'asc')
+            ->defaultSort('code', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('title')->searchable()->sortable()->wrap(),
