@@ -13,7 +13,6 @@ return [
         'title' => 'Title',
         'vendor' => 'Vendor',
         'description' => 'Description',
-        'logo_url' => 'Logo URL',
         'system_document_link' => 'System Documentation Link',
         'security_password_policy_compliant' => 'Password Policy Compliant',
         'security_sso_connected' => 'SSO Connected',

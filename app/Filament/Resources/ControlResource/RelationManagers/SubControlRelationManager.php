@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ControlResource\RelationManagers;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Enums\Applicability;
 use App\Models\Control;
+use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -61,8 +62,10 @@ class SubControlRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('applicability')->searchable()->sortable()->wrap(),
                 Tables\Columns\TextColumn::make('title')->searchable()->sortable()->wrap(),
+                Tables\Columns\TextColumn::make('description')->html()
+                    ->wrap()
+                    ->limit(300)
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
@@ -74,6 +77,7 @@ class SubControlRelationManager extends RelationManager
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()->hiddenLabel(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ]);

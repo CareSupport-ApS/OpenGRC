@@ -57,7 +57,7 @@ class Standard extends Model
      */
     public function controls(): HasMany
     {
-        return $this->hasMany(Control::class);
+        return $this->hasMany(Control::class)->whereNull('parent_control_id');
     }
 
     /**
