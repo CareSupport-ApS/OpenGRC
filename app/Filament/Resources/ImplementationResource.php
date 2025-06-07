@@ -6,6 +6,7 @@ use App\Enums\Effectiveness;
 use App\Enums\ImplementationStatus;
 use App\Filament\Resources\ImplementationResource\Pages;
 use App\Filament\Resources\ImplementationResource\RelationManagers;
+use App\Filament\Resources\RelationManagers\AssetAttachmentsRelationManager;
 use App\Models\Control;
 use App\Models\Implementation;
 use Exception;
@@ -119,8 +120,8 @@ class ImplementationResource extends Resource
             {
                 public function toHtml()
                 {
-                    return "<div class='fi-section-content p-6'>" . 
-                        __('implementation.table.description') . 
+                    return "<div class='fi-section-content p-6'>" .
+                        __('implementation.table.description') .
                         "</div>";
                 }
             })
@@ -139,12 +140,12 @@ class ImplementationResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('effectiveness')
                     ->label(__('implementation.table.columns.effectiveness'))
-                    ->getStateUsing(fn ($record) => $record->getEffectiveness())
+                    ->getStateUsing(fn($record) => $record->getEffectiveness())
                     ->sortable()
                     ->badge(),
                 Tables\Columns\TextColumn::make('last_assessed')
                     ->label(__('implementation.table.columns.last_assessed'))
-                    ->getStateUsing(fn ($record) => $record->getEffectivenessDate() ? $record->getEffectivenessDate() : 'Not yet audited')
+                    ->getStateUsing(fn($record) => $record->getEffectivenessDate() ? $record->getEffectivenessDate() : 'Not yet audited')
                     ->sortable()
                     ->badge(),
                 Tables\Columns\TextColumn::make('status')
@@ -198,10 +199,10 @@ class ImplementationResource extends Resource
                     ->schema([
                         TextEntry::make('code')
                             ->columnSpan(2)
-                            ->getStateUsing(fn ($record) => "$record->code - $record->title")
+                            ->getStateUsing(fn($record) => "$record->code - $record->title")
                             ->label('Title'),
                         TextEntry::make('effectiveness')
-                            ->getStateUsing(fn ($record) => $record->getEffectiveness())
+                            ->getStateUsing(fn($record) => $record->getEffectiveness())
                             ->badge(),
                         TextEntry::make('status')->badge(),
                         TextEntry::make('details')
@@ -221,7 +222,7 @@ class ImplementationResource extends Resource
             RelationManagers\ControlsRelationManager::class,
             RelationManagers\AuditItemRelationManager::class,
             RelationManagers\RisksRelationManager::class,
-            RelationManagers\AttachmentsRelationManager::class,
+            AssetAttachmentsRelationManager::class,
         ];
     }
 
@@ -338,7 +339,7 @@ class ImplementationResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('last_assessed')
                     ->label('Last Audit')
-                    ->getStateUsing(fn ($record) => $record->getEffectivenessDate() ? $record->getEffectivenessDate() : 'Not yet audited')
+                    ->getStateUsing(fn($record) => $record->getEffectivenessDate() ? $record->getEffectivenessDate() : 'Not yet audited')
                     ->badge(),
                 Tables\Columns\TextColumn::make('status')
                     ->toggleable()

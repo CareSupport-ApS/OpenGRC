@@ -3,11 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Enums\VendorType;
+use App\Filament\Resources\RelationManagers\AssetAttachmentsRelationManager;
+use App\Filament\Resources\RelationManagers\BusinessDataEntriesRelationManager;
+use App\Filament\Resources\RelationManagers\PersonalDataEntriesRelationManager;
 use App\Filament\Resources\VendorResource\Pages;
 use App\Filament\Resources\VendorResource\RelationManagers;
 use App\Models\Vendor;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -136,7 +140,12 @@ class VendorResource extends Resource
     {
         return [
             RelationManagers\SystemsRelationManager::class,
-            RelationManagers\AttachmentsRelationManager::class,
+            AssetAttachmentsRelationManager::class,
+            RelationGroup::make('Data Processing Activities', [
+                BusinessDataEntriesRelationManager::class,
+                PersonalDataEntriesRelationManager::class
+            ]),
+
         ];
     }
 

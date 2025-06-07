@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Filament\Resources\VendorResource\RelationManagers;
+namespace App\Filament\Resources\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
-class AttachmentsRelationManager extends RelationManager
+class AssetAttachmentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'attachments';
 
@@ -23,24 +21,23 @@ class AttachmentsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('file_name')
                     ->required()
+                    ->columnSpanFull()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('file_path')
                     ->downloadable()
-                    ->columnSpanFull()
-                    ->label('File')
-                    ->required()
                     ->openable()
                     ->disk(config('filesystems.default'))
-                    ->directory('vendor-attachments')
+                    ->directory('asset-attachments')
                     ->visibility('private')
-                    ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
-                        return Str::random(40) . '.' . $file->getClientOriginalExtension();
-                    })
-                    ->deleteUploadedFileUsing(function ($state) {
-                        if ($state) {
-                            Storage::disk(config('filesystems.default'))->delete($state);
-                        }
-                    }),
+                    ->preserveFilenames()
+                    ->deleteUploadedFileUsing(
+                        fn($state) => $state
+                            ? Storage::disk(config('filesystems.default'))->delete($state)
+                            : null,
+                    )
+                    ->required()
+                    ->columnSpanFull()
+                    ->label('File'),
             ]);
     }
 
@@ -48,12 +45,8 @@ class AttachmentsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('file_name')
-                    ->label('File')
-                    ->url(fn($record) => route('priv-storage', ['filepath' => $record->file_path]))
-                    ->openUrlInNewTab() // optional: keeps user on current page
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('file_name')
+                    ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
@@ -62,7 +55,7 @@ class AttachmentsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
