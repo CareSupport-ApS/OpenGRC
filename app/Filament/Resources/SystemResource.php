@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\RelationManagers\AssetAttachmentsRelationManager;
+use App\Filament\Resources\RelationManagers\BusinessDataEntriesRelationManager;
+use App\Filament\Resources\RelationManagers\PersonalDataEntriesRelationManager;
 use App\Filament\Resources\SystemResource\Pages;
 use App\Models\System;
 use App\Models\Vendor;
@@ -9,6 +12,7 @@ use App\Filament\Resources\SystemResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -131,9 +135,11 @@ class SystemResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AttachmentsRelationManager::class,
-            RelationManagers\PersonalDataEntriesRelationManager::class,
-            RelationManagers\BusinessDataEntriesRelationManager::class,
+            AssetAttachmentsRelationManager::class,
+            RelationGroup::make('Data Processing Activities', [
+                BusinessDataEntriesRelationManager::class,
+                PersonalDataEntriesRelationManager::class
+            ]),
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\VendorResource\RelationManagers;
+namespace App\Filament\Resources\RelationManagers;
 
 use App\Enums\DataSubjectCategory;
 use App\Enums\PersonalDataType;
@@ -18,24 +18,29 @@ class PersonalDataEntriesRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('process_name')
+                    ->label('Process Name')
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('purpose')
+                    ->label('Purpose')
+                    ->columnSpanFull()
+                    ->rows(3),
                 Forms\Components\Select::make('subject_category')
                     ->required()
+                    ->columnSpanFull()
                     ->options(array_combine(
                         array_column(DataSubjectCategory::cases(), 'value'),
                         array_map(fn($case) => $case->getLabel(), DataSubjectCategory::cases())
                     )),
-                Forms\Components\TextInput::make('process_name')
-                    ->label('Process Name'),
-                Forms\Components\Textarea::make('purpose')
-                    ->label('Purpose')
-                    ->rows(3),
                 Forms\Components\CheckboxList::make('data_types')
+                    ->columnSpanFull()
                     ->options(array_combine(
                         array_column(PersonalDataType::cases(), 'value'),
                         array_map(fn($case) => $case->getLabel(), PersonalDataType::cases())
                     ))
                     ->columns(2)
                     ->required(),
+
             ]);
     }
 
@@ -46,12 +51,6 @@ class PersonalDataEntriesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('subject_category')
                     ->label('Category')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('process_name')
-                    ->label('Process')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('purpose')
-                    ->label('Purpose')
-                    ->wrap(),
                 Tables\Columns\TextColumn::make('data_types')
                     ->label('Data Types')
                     ->formatStateUsing(fn($state) => is_array($state) ? implode(', ', $state) : $state)

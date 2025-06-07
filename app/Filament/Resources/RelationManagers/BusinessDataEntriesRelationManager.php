@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\VendorResource\RelationManagers;
+namespace App\Filament\Resources\RelationManagers;
 
 use App\Enums\BusinessCriticalDataType;
 use Filament\Forms;
@@ -18,16 +18,19 @@ class BusinessDataEntriesRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\TextInput::make('process_name')
-                    ->label('Process Name'),
+                    ->label('Process Name')
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('purpose')
                     ->label('Purpose')
-                    ->rows(3),
+                    ->rows(3)
+                    ->columnSpanFull(),
                 Forms\Components\CheckboxList::make('data_types')
                     ->options(array_combine(
                         array_column(BusinessCriticalDataType::cases(), 'value'),
                         array_map(fn($case) => $case->getLabel(), BusinessCriticalDataType::cases())
                     ))
                     ->columns(2)
+                    ->columnSpanFull()
                     ->required(),
             ]);
     }
