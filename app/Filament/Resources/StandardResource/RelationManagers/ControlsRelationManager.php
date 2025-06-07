@@ -59,6 +59,7 @@ class ControlsRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
+            ->defaultSort('code', 'asc')
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->sortable(),
@@ -81,7 +82,7 @@ class ControlsRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->hiddenLabel()
-                    ->url(fn ($record) => route('filament.app.resources.controls.view', $record)),
+                    ->url(fn($record) => route('filament.app.resources.controls.view', $record)),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
