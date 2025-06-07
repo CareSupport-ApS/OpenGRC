@@ -108,6 +108,7 @@ class SystemResource extends Resource
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\IconColumn::make('security_password_policy_compliant')
+            RelationManagers\BusinessDataEntriesRelationManager::class,
                     ->label(__('system.table.columns.security_password_policy_compliant'))
                     ->boolean(),
                 Tables\Columns\IconColumn::make('security_sso_connected')
