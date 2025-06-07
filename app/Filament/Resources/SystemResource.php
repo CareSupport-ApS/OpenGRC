@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\RelationManagers\BaseAttachmentsRelationManager;
+use App\Filament\Resources\RelationManagers\BasePersonalDataEntriesRelationManager;
 use App\Filament\Resources\SystemResource\Pages;
 use App\Models\System;
 use App\Models\Vendor;
@@ -131,8 +133,8 @@ class SystemResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AttachmentsRelationManager::class,
-            RelationManagers\PersonalDataEntriesRelationManager::class,
+            BaseAttachmentsRelationManager::class,
+            BasePersonalDataEntriesRelationManager::class
         ];
     }
 

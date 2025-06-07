@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Enums\VendorType;
+use App\Filament\Resources\RelationManagers\BaseAttachmentsRelationManager;
+use App\Filament\Resources\RelationManagers\BasePersonalDataEntriesRelationManager;
 use App\Filament\Resources\VendorResource\Pages;
 use App\Filament\Resources\VendorResource\RelationManagers;
 use App\Models\Vendor;
@@ -136,8 +138,8 @@ class VendorResource extends Resource
     {
         return [
             RelationManagers\SystemsRelationManager::class,
-            RelationManagers\AttachmentsRelationManager::class,
-            RelationManagers\PersonalDataEntriesRelationManager::class,
+            BaseAttachmentsRelationManager::class,
+            BasePersonalDataEntriesRelationManager::class
         ];
     }
 

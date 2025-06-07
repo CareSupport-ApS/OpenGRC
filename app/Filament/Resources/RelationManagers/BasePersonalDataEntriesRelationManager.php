@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\SystemResource\RelationManagers;
+namespace App\Filament\Resources\RelationManagers;
 
 use App\Enums\DataSubjectCategory;
 use App\Enums\PersonalDataType;
@@ -10,7 +10,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class PersonalDataEntriesRelationManager extends RelationManager
+class BasePersonalDataEntriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'personalDataEntries';
 
@@ -20,11 +20,13 @@ class PersonalDataEntriesRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Select::make('subject_category')
                     ->required()
+                    ->columnSpanFull()
                     ->options(array_combine(
                         array_column(DataSubjectCategory::cases(), 'value'),
                         array_map(fn($case) => $case->getLabel(), DataSubjectCategory::cases())
                     )),
                 Forms\Components\CheckboxList::make('data_types')
+                    ->columnSpanFull()
                     ->options(array_combine(
                         array_column(PersonalDataType::cases(), 'value'),
                         array_map(fn($case) => $case->getLabel(), PersonalDataType::cases())
