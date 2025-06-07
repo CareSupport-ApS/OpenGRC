@@ -121,7 +121,7 @@ class ControlResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('code', 'desc')
+            ->defaultSort('code', 'asc')
             ->description(new class implements \Illuminate\Contracts\Support\Htmlable
             {
                 public function toHtml()

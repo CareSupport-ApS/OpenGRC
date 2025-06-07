@@ -59,7 +59,7 @@ class ControlsRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('title')
-            ->defaultSort('code', 'desc')
+            ->defaultSort('code', 'asc')
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->sortable(),
