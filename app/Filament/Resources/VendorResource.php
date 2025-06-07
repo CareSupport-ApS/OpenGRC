@@ -113,7 +113,6 @@ class VendorResource extends Resource
                 Tables\Columns\IconColumn::make('has_dpa')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('is_personal_data_processor')->boolean(),
-            RelationManagers\BusinessDataEntriesRelationManager::class,
                 Tables\Columns\IconColumn::make('is_critical_business_data_processor')->boolean(),
                 Tables\Columns\IconColumn::make('gdpr_compliant')->boolean(),
                 Tables\Columns\IconColumn::make('has_contract')->boolean(),

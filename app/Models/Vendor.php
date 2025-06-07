@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Attachment;
 use App\Models\PersonalDataEntry;
-use App\Models\BusinessDataEntry;
 use App\Models\System;
 
 class Vendor extends Model
@@ -54,10 +53,5 @@ class Vendor extends Model
     public function personalDataEntries(): MorphMany
     {
         return $this->morphMany(PersonalDataEntry::class, 'processable');
-    }
-
-    public function businessDataEntries(): MorphMany
-    {
-        return $this->morphMany(BusinessDataEntry::class, 'processable');
     }
 }
