@@ -132,6 +132,8 @@ class SystemResource extends Resource
     {
         return [
             RelationManagers\AttachmentsRelationManager::class,
+            RelationManagers\PersonalDataEntriesRelationManager::class,
+            RelationManagers\BusinessDataEntriesRelationManager::class,
         ];
     }
 
