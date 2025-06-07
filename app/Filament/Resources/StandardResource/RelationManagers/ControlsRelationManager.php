@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StandardResource\RelationManagers;
 
 use App\Enums\Applicability;
+use App\Enums\ControlStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -29,6 +30,12 @@ class ControlsRelationManager extends RelationManager
                     ->enum(Applicability::class)
                     ->options(Applicability::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Select the relevance of this standard to your organization.')
+                    ->native(false),
+                Forms\Components\Select::make('status')
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->required()
+                    ->enum(ControlStatus::class)
+                    ->options(ControlStatus::class)
                     ->native(false),
                 Forms\Components\TextInput::make('title')
                     ->required()
@@ -72,6 +79,12 @@ class ControlsRelationManager extends RelationManager
                     ->wrap()
                     ->limit(300)
                     ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('completion_percentage')
+                    ->label(__('control.table.columns.progress'))
+                    ->getStateUsing(fn($record) => $record->completion_percentage.'%')
+                    ->visible(fn($record) => $record->subControls()->count() > 0),
             ])
             ->filters([
                 //

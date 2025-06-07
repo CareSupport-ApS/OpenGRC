@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use App\Enums\ControlStatus;
 
 class ControlsRelationManager extends RelationManager
 {
@@ -31,6 +32,12 @@ class ControlsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('completion_percentage')
+                    ->label(__('control.table.columns.progress'))
+                    ->getStateUsing(fn($record) => $record->completion_percentage.'%')
+                    ->visible(fn($record) => $record->subControls()->count() > 0),
             ])
             ->filters([
                 //

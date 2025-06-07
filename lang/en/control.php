@@ -52,6 +52,8 @@ return [
             'enforcement' => 'Enforcement',
             'effectiveness' => 'Effectiveness',
             'applicability' => 'Applicability',
+            'status' => 'Status',
+            'progress' => 'Progress',
             'assessed' => 'Last Assessed',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -63,6 +65,7 @@ return [
             'category' => 'Category',
             'enforcement' => 'Enforcement',
             'applicability' => 'Applicability',
+            'status' => 'Status',
         ],
     ],
     'infolist' => [

@@ -7,6 +7,7 @@ use App\Enums\ControlCategory;
 use App\Enums\ControlEnforcementCategory;
 use App\Enums\ControlType;
 use App\Enums\Effectiveness;
+use App\Enums\ControlStatus;
 use App\Models\Control;
 use App\Models\Standard;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,6 +29,7 @@ class ControlFactory extends Factory
             'enforcement' => $this->faker->randomElement(ControlEnforcementCategory::class),
             'effectiveness' => $this->faker->randomElement(Effectiveness::class),
             'applicability' => $this->faker->randomElement(Applicability::class),
+            'status' => $this->faker->randomElement(ControlStatus::class),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 

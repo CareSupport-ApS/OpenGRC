@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ControlResource\RelationManagers;
 
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Enums\Applicability;
+use App\Enums\ControlStatus;
 use App\Models\Control;
 use Filament\Actions\EditAction;
 use Filament\Forms;
@@ -32,6 +33,12 @@ class SubControlRelationManager extends RelationManager
                     ->enum(Applicability::class)
                     ->options(Applicability::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Select the relevance of this standard to your organization.')
+                    ->native(false),
+                Forms\Components\Select::make('status')
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->required()
+                    ->enum(ControlStatus::class)
+                    ->options(ControlStatus::class)
                     ->native(false),
                 Forms\Components\TextInput::make('title')
                     ->required()
@@ -65,6 +72,7 @@ class SubControlRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('title')->searchable()->sortable()->wrap(),
+                Tables\Columns\TextColumn::make('status')->badge(),
                 Tables\Columns\TextColumn::make('description')->html()
                     ->wrap()
                     ->limit(300)
