@@ -162,8 +162,8 @@ class ControlResource extends Resource
                     ->label(__('control.table.columns.effectiveness'))
                     ->badge()
                     ->sortable()
-                    ->default(function (Control $record) {
-                        return $record->getEffectiveness();
+                    ->default(function (?Control $record) {
+                        return $record?->getEffectiveness();
                     }),
                 Tables\Columns\TextColumn::make('applicability')
                     ->label(__('control.table.columns.applicability'))
@@ -172,8 +172,8 @@ class ControlResource extends Resource
                 Tables\Columns\TextColumn::make('LatestAuditDate')
                     ->label(__('control.table.columns.assessed'))
                     ->sortable()
-                    ->default(function (Control $record) {
-                        return $record->getEffectivenessDate();
+                    ->default(function (?Control $record) {
+                        return $record?->getEffectivenessDate();
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('control.table.columns.created_at'))
@@ -254,15 +254,15 @@ class ControlResource extends Resource
                         TextEntry::make('title')->columnSpanFull(),
                         TextEntry::make('code'),
                         TextEntry::make('effectiveness')
-                            ->default(function (Control $record) {
-                                return $record->getEffectiveness();
+                            ->default(function (?Control $record) {
+                                return $record?->getEffectiveness();
                             }),
                         TextEntry::make('type')->badge(),
                         TextEntry::make('category')->badge(),
                         TextEntry::make('enforcement')->badge(),
                         TextEntry::make('lastAuditDate')
-                            ->default(function (Control $record) {
-                                return $record->getEffectivenessDate();
+                            ->default(function (?Control $record) {
+                                return $record?->getEffectivenessDate();
                             }),
                         TextEntry::make('description')
                             ->columnSpanFull()
@@ -270,12 +270,12 @@ class ControlResource extends Resource
                             ->html(),
                         TextEntry::make('discussion')
                             ->columnSpanFull()
-                            ->hidden(fn(Control $record) => ! $record->discussion)
+                            ->hidden(fn(?Control $record) => ! $record?->discussion)
                             ->html(),
                         TextEntry::make('test')
                             ->label(__('control.infolist.test_plan'))
                             ->columnSpanFull()
-                            ->hidden(fn(Control $record) => ! $record->discussion)
+                            ->hidden(fn(?Control $record) => ! $record?->discussion)
                             ->html(),
                     ]),
             ]);
