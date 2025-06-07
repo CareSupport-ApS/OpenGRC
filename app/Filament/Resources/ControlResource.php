@@ -8,6 +8,7 @@ use App\Enums\ControlCategory;
 use App\Enums\ControlEnforcementCategory;
 use App\Enums\ControlType;
 use App\Enums\Effectiveness;
+use App\Enums\ControlStatus;
 use App\Filament\Resources\ControlResource\Pages;
 use App\Filament\Resources\ControlResource\RelationManagers;
 use App\Models\Control;
@@ -87,6 +88,11 @@ class ControlResource extends Resource
                     ->searchable()
                     ->preload()
                     ->nullable(),
+                Forms\Components\Select::make('status')
+                    ->options(ControlStatus::class)
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->required()
+                    ->native(false),
                 Forms\Components\Select::make('enforcement')
                     ->options(ControlEnforcementCategory::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.enforcement.tooltip'))
@@ -169,6 +175,14 @@ class ControlResource extends Resource
                     ->label(__('control.table.columns.applicability'))
                     ->sortable()
                     ->badge(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label(__('control.table.columns.status'))
+                    ->badge()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('completion_percentage')
+                    ->label(__('control.table.columns.progress'))
+                    ->getStateUsing(fn(Control $record) => $record->completion_percentage.'%')
+                    ->visible(fn(Control $record) => $record->subControls()->count() > 0),
                 Tables\Columns\TextColumn::make('LatestAuditDate')
                     ->label(__('control.table.columns.assessed'))
                     ->sortable()
@@ -206,6 +220,9 @@ class ControlResource extends Resource
                 Tables\Filters\SelectFilter::make('applicability')
                     ->options(Applicability::class)
                     ->label(__('control.table.filters.applicability')),
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(ControlStatus::class)
+                    ->label(__('control.table.filters.status')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -260,6 +277,11 @@ class ControlResource extends Resource
                         TextEntry::make('type')->badge(),
                         TextEntry::make('category')->badge(),
                         TextEntry::make('enforcement')->badge(),
+                        TextEntry::make('status')->badge(),
+                        TextEntry::make('completion_percentage')
+                            ->label(__('control.table.columns.progress'))
+                            ->default(fn (Control $record) => $record->completion_percentage.'%')
+                            ->visible(fn (Control $record) => $record->subControls()->count() > 0),
                         TextEntry::make('lastAuditDate')
                             ->default(function (Control $record) {
                                 return $record->getEffectivenessDate();
