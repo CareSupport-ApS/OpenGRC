@@ -8,18 +8,22 @@ use App\Enums\ControlCategory;
 use App\Enums\ControlEnforcementCategory;
 use App\Enums\ControlType;
 use App\Enums\Effectiveness;
+use App\Enums\ControlStatus;
 use App\Filament\Resources\ControlResource\Pages;
 use App\Filament\Resources\ControlResource\RelationManagers;
+use App\Filament\Resources\ControlResource\RelationManagers\SubControlRelationManager;
 use App\Models\Control;
 use App\Models\Standard;
 use Exception;
 use Filament\Forms;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -66,6 +70,11 @@ class ControlResource extends Resource
         return $form
             ->columns(3)
             ->schema([
+                ToggleButtons::make('status')
+                    ->label('Status')
+                    ->options(ControlStatus::class)
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->grouped(),
                 Forms\Components\TextInput::make('code')
                     ->required()
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.code.tooltip'))
@@ -148,33 +157,16 @@ class ControlResource extends Resource
                 Tables\Columns\TextColumn::make('standard.name')
                     ->label(__('control.table.columns.standard'))
                     ->wrap()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->label(__('control.table.columns.type'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('category')
-                    ->label(__('control.table.columns.category'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('enforcement')
-                    ->label(__('control.table.columns.enforcement'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('LatestAuditEffectiveness')
-                    ->label(__('control.table.columns.effectiveness'))
+                    ->sortable()
+                    ->hiddenOn(SubControlRelationManager::class),
+                TextColumn::make('applicability')
+                    ->label('Applicability')
                     ->badge()
-                    ->sortable()
-                    ->default(function (Control $record) {
-                        return $record->getEffectiveness();
-                    }),
-                Tables\Columns\TextColumn::make('applicability')
-                    ->label(__('control.table.columns.applicability'))
-                    ->sortable()
-                    ->badge(),
-                Tables\Columns\TextColumn::make('LatestAuditDate')
-                    ->label(__('control.table.columns.assessed'))
-                    ->sortable()
-                    ->default(function (Control $record) {
-                        return $record->getEffectivenessDate();
-                    }),
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label(__('control.table.columns.status'))
+                    ->badge()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('control.table.columns.created_at'))
                     ->dateTime()
@@ -206,6 +198,9 @@ class ControlResource extends Resource
                 Tables\Filters\SelectFilter::make('applicability')
                     ->options(Applicability::class)
                     ->label(__('control.table.filters.applicability')),
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(ControlStatus::class)
+                    ->label(__('control.table.filters.status')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -251,18 +246,21 @@ class ControlResource extends Resource
                 Section::make(__('control.infolist.section_title'))
                     ->columns(3)
                     ->schema([
-                        TextEntry::make('title')->columnSpanFull(),
+                        TextEntry::make('status')
+                            ->label(__('control.table.columns.progress'))
+                            ->badge(),
+                        TextEntry::make('title')->columnSpan(2),
                         TextEntry::make('code'),
                         TextEntry::make('effectiveness')
-                            ->default(function (Control $record) {
-                                return $record->getEffectiveness();
+                            ->default(function (?Control $record) {
+                                return $record?->getEffectiveness();
                             }),
                         TextEntry::make('type')->badge(),
                         TextEntry::make('category')->badge(),
                         TextEntry::make('enforcement')->badge(),
                         TextEntry::make('lastAuditDate')
-                            ->default(function (Control $record) {
-                                return $record->getEffectivenessDate();
+                            ->default(function (?Control $record) {
+                                return $record?->getEffectivenessDate();
                             }),
                         TextEntry::make('description')
                             ->columnSpanFull()
@@ -270,12 +268,12 @@ class ControlResource extends Resource
                             ->html(),
                         TextEntry::make('discussion')
                             ->columnSpanFull()
-                            ->hidden(fn(Control $record) => ! $record->discussion)
+                            ->hidden(fn(?Control $record) => ! $record?->discussion)
                             ->html(),
                         TextEntry::make('test')
                             ->label(__('control.infolist.test_plan'))
                             ->columnSpanFull()
-                            ->hidden(fn(Control $record) => ! $record->discussion)
+                            ->hidden(fn(?Control $record) => ! $record?->discussion)
                             ->html(),
                     ]),
             ]);

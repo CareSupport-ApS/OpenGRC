@@ -4,14 +4,19 @@ namespace App\Filament\Resources\ControlResource\RelationManagers;
 
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Enums\Applicability;
+use App\Enums\ControlStatus;
+use App\Filament\Resources\ControlResource;
 use App\Models\Control;
 use Filament\Actions\EditAction;
 use Filament\Forms;
+use Filament\Forms\Components\ToggleButtons;
+use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Client\Request;
 
 class SubControlRelationManager extends RelationManager
 {
@@ -21,6 +26,13 @@ class SubControlRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                ToggleButtons::make('status')
+                    ->label('Status')
+                    ->helperText('Updating a status for a subcontrol, will also impact the parent control')
+                    ->options(ControlStatus::class)
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->columnSpanFull()
+                    ->grouped(),
                 Forms\Components\TextInput::make('code')
                     ->required()
                     ->maxLength(255)
@@ -60,15 +72,8 @@ class SubControlRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return $table
-            ->defaultSort('code', 'asc')
-            ->columns([
-                Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('title')->searchable()->sortable()->wrap(),
-                Tables\Columns\TextColumn::make('description')->html()
-                    ->wrap()
-                    ->limit(300)
-            ])
+        return ControlResource::table($table)
+            ->description('If this control has any associated sub-controls, they have to be completed too.')
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->using(function (array $data, RelationManager $livewire) {
@@ -80,7 +85,11 @@ class SubControlRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->hiddenLabel()->slideOver(),
-                Tables\Actions\EditAction::make()->slideOver(),
+                Tables\Actions\EditAction::make()
+                    ->slideOver()
+                    ->after(function (Component $livewire) {
+                        $livewire->dispatch('refresh');
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ]);
     }

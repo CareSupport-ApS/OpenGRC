@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Applicability;
+use App\Enums\ControlStatus;
 use App\Enums\ControlCategory;
 use App\Enums\ControlEnforcementCategory;
 use App\Enums\ControlType;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Program;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,7 +25,7 @@ use Illuminate\Support\Carbon;
  * Class Control
  *
  * @property int $id
- * @property Applicability $status
+ * @property ControlStatus $status
  * @property Effectiveness $effectiveness
  * @property ControlType $type
  * @property ControlCategory $category
@@ -69,7 +71,7 @@ class Control extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'status' => Applicability::class,
+        'status' => ControlStatus::class,
         'effectiveness' => Effectiveness::class,
         'type' => ControlType::class,
         'category' => ControlCategory::class,
@@ -183,5 +185,29 @@ class Control extends Model
     public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class);
+    }
+
+    protected static function booted()
+    {
+        static::saved(function (Control $control) {
+            if ($control->parent) {
+                $parent = $control->parent;
+
+                if ($control->status !== ControlStatus::COMPLETED) {
+                    if ($parent->status !== ControlStatus::IN_PROGRESS) {
+                        $parent->status = ControlStatus::IN_PROGRESS;
+                        $parent->save();
+                    }
+                } else {
+                    if ($parent->subControls()->where('status', '!=', ControlStatus::COMPLETED)->count() === 0) {
+                        $parent->status = ControlStatus::COMPLETED;
+                        $parent->save();
+                    } else {
+                        $parent->status = ControlStatus::IN_PROGRESS;
+                        $parent->save();
+                    }
+                }
+            }
+        });
     }
 }

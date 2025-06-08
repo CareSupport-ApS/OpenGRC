@@ -6,6 +6,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use App\Enums\ControlStatus;
+use App\Filament\Resources\ControlResource;
 
 class ControlsRelationManager extends RelationManager
 {
@@ -13,24 +15,7 @@ class ControlsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return $table
-            ->recordTitleAttribute('title')
-            ->columns([
-                Tables\Columns\TextColumn::make('code')
-                    ->sortable()
-                    ->searchable()
-                    ->wrap(),
-                Tables\Columns\TextColumn::make('standard.name')
-                    ->sortable()
-                    ->searchable()
-                    ->wrap(),
-                Tables\Columns\TextColumn::make('title')
-                    ->sortable()
-                    ->wrap(),
-            ])
-            ->filters([
-                //
-            ])
+        return ControlResource::table($table)
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
@@ -47,7 +32,7 @@ class ControlsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
-                    ->url(fn ($record) => route('filament.app.resources.controls.view', $record)),
+                    ->url(fn($record) => route('filament.app.resources.controls.view', $record)),
 
             ])
             ->bulkActions([

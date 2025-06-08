@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ControlResource\Pages;
 
+use Livewire\Attributes\On;
+
 use App\Filament\Resources\ControlResource;
 use App\Http\Controllers\AiController;
 use Filament\Actions;
@@ -33,5 +35,12 @@ class ViewControl extends ViewRecord
     public function getTitle(): string
     {
         return 'Control';
+    }
+
+    #[On('refresh')]
+    public function refreshPage(): void
+    {
+        // re-query the model + rebuild every form component
+        $this->refreshFormData(['status']);
     }
 }

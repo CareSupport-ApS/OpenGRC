@@ -19,6 +19,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Mail;
@@ -137,6 +138,9 @@ class EditAuditItem extends EditRecord
             ->schema([
                 Forms\Components\Section::make('Item Information')
                     ->schema([
+                        Placeholder::make('control_status')
+                            ->label('Control Status')
+                            ->content(fn(AuditItem $record): string => $record->auditable->status->value),
                         Placeholder::make('control_code')
                             ->label('Code')
                             ->content(fn(AuditItem $record): ?string => $record->auditable->code),

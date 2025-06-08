@@ -26,23 +26,26 @@ class AuditItemRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Section::make('Control Information')
                     ->schema([
+                        Placeholder::make('control_status')
+                            ->label('Control Status')
+                            ->content(fn(AuditItem $record): string => $record->control->status),
                         Placeholder::make('control_code')
                             ->label('Control Code')
-                            ->content(fn (AuditItem $record): string => $record->control->code),
+                            ->content(fn(AuditItem $record): string => $record->control->code),
                         Placeholder::make('control_title')
                             ->label('Control Title')
-                            ->content(fn (AuditItem $record): string => $record->control->title),
+                            ->content(fn(AuditItem $record): string => $record->control->title),
                         Placeholder::make('control_desc')
                             ->label('Control Description')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString(optional($record->control)->description ?? ''))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString(optional($record->control)->description ?? ''))
                             ->columnSpanFull(),
                         Placeholder::make('control_discussion')
                             ->label('Control Discussion')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString(optional($record->control)->discussion ?? ''))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString(optional($record->control)->discussion ?? ''))
                             ->columnSpanFull(),
                         Placeholder::make('sub_controls')
                             ->label('Sub Controls')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString($this->subControlsList($record)))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString($this->subControlsList($record)))
                             ->columnSpanFull(),
 
                     ])->columns(2)->collapsible(true),
@@ -80,13 +83,13 @@ class AuditItemRelationManager extends RelationManager
                         // supported in Filament - potentially in v4.x
                         Placeholder::make('control.implementations')
                             ->label('Documented Implementations')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString($this->implementationsTable($record)))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString($this->implementationsTable($record)))
                             ->columnSpanFull()
                             ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Implementations that a related to this control.'),
 
                         Placeholder::make('data_requests')
                             ->label('Data Requests Issued')
-                            ->content(fn (AuditItem $record): HtmlString => new HtmlString($this->dataRequestsTable($record)))
+                            ->content(fn(AuditItem $record): HtmlString => new HtmlString($this->dataRequestsTable($record)))
                             ->columnSpanFull()
                             ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Data Requests that have been issued.'),
 
@@ -113,11 +116,11 @@ class AuditItemRelationManager extends RelationManager
         // Loop through dataRequests and generate table rows
         foreach ($dataRequests as $request) {
             $html .= '<tr>';
-            $html .= '<td class="border px-4 py-2">'.e($request->code).'</td>';
-            $html .= '<td class="border px-4 py-2">'.'<a target="_blank"   href='.
-                route('filament.app.resources.implementations.view', $request->id).
-                '>'.e($request->title).'</a></td>';
-            $html .= '<td class="border px-4 py-2">'.$request->details.'</td>';
+            $html .= '<td class="border px-4 py-2">' . e($request->code) . '</td>';
+            $html .= '<td class="border px-4 py-2">' . '<a target="_blank"   href=' .
+                route('filament.app.resources.implementations.view', $request->id) .
+                '>' . e($request->title) . '</a></td>';
+            $html .= '<td class="border px-4 py-2">' . $request->details . '</td>';
             $html .= '</tr>';
         }
 
@@ -148,19 +151,19 @@ class AuditItemRelationManager extends RelationManager
         // Loop through dataRequests and generate table rows
         foreach ($dataRequests as $request) {
             $html .= '<tr>';
-            $html .= '<td class="border px-4 py-2">'.e($request->details).'</td>';
+            $html .= '<td class="border px-4 py-2">' . e($request->details) . '</td>';
             $html .= '<td class="border px-4 py-2">';
             foreach ($request->responses as $r) {
-                $html .= '<div>'.$r->response.'</div>';
+                $html .= '<div>' . $r->response . '</div>';
                 if (isset($r->attachments)) {
                     foreach ($r->attachments as $attachment) {
-                        $html .= '***<a href="#">'.$attachment->description.'</a>';
+                        $html .= '***<a href="#">' . $attachment->description . '</a>';
                     }
                 }
             }
 
             $html .= '</td>';
-            $html .= '<td class="border px-4 py-2">'.$request->status.'</td>';
+            $html .= '<td class="border px-4 py-2">' . $request->status . '</td>';
             $html .= '</tr>';
         }
 
@@ -178,7 +181,7 @@ class AuditItemRelationManager extends RelationManager
         if ($subs instanceof \Illuminate\Support\Collection && $subs->isNotEmpty()) {
             $list = '<ul class="list-disc ml-6">';
             foreach ($subs as $sub) {
-                $list .= '<li>'.e($sub->code).' - '.e($sub->title).'</li>';
+                $list .= '<li>' . e($sub->code) . ' - ' . e($sub->title) . '</li>';
             }
             $list .= '</ul>';
             return $list;
@@ -212,10 +215,9 @@ class AuditItemRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->label('Assess control')
-                    ->visible(fn (AuditItem $record): bool => $record->audit->status === WorkflowStatus::INPROGRESS)
-                    ->url(fn (AuditItem $record): string => route('filament.app.resources.audit-items.edit', ['record' => $record->id])),
+                    ->visible(fn(AuditItem $record): bool => $record->audit->status === WorkflowStatus::INPROGRESS)
+                    ->url(fn(AuditItem $record): string => route('filament.app.resources.audit-items.edit', ['record' => $record->id])),
             ])
             ->bulkActions([]);
-
     }
 }
