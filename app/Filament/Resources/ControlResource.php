@@ -249,15 +249,15 @@ class ControlResource extends Resource
                         TextEntry::make('title')->columnSpan(2),
                         TextEntry::make('code'),
                         TextEntry::make('effectiveness')
-                            ->default(function (Control $record) {
-                                return $record->getEffectiveness();
+                            ->default(function (?Control $record) {
+                                return $record?->getEffectiveness();
                             }),
                         TextEntry::make('type')->badge(),
                         TextEntry::make('category')->badge(),
                         TextEntry::make('enforcement')->badge(),
                         TextEntry::make('lastAuditDate')
-                            ->default(function (Control $record) {
-                                return $record->getEffectivenessDate();
+                            ->default(function (?Control $record) {
+                                return $record?->getEffectivenessDate();
                             }),
                         TextEntry::make('description')
                             ->columnSpanFull()
@@ -265,12 +265,12 @@ class ControlResource extends Resource
                             ->html(),
                         TextEntry::make('discussion')
                             ->columnSpanFull()
-                            ->hidden(fn(Control $record) => ! $record->discussion)
+                            ->hidden(fn(?Control $record) => ! $record?->discussion)
                             ->html(),
                         TextEntry::make('test')
                             ->label(__('control.infolist.test_plan'))
                             ->columnSpanFull()
-                            ->hidden(fn(Control $record) => ! $record->discussion)
+                            ->hidden(fn(?Control $record) => ! $record?->discussion)
                             ->html(),
                     ]),
             ]);
