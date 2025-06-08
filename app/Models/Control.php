@@ -187,18 +187,6 @@ class Control extends Model
         return $this->belongsToMany(Program::class);
     }
 
-    public function getCompletionPercentageAttribute(): int
-    {
-        $total = $this->subControls()->count();
-        if ($total === 0) {
-            return $this->status === ControlStatus::COMPLETED ? 100 : 0;
-        }
-
-        $completed = $this->subControls()->where('status', ControlStatus::COMPLETED)->count();
-
-        return (int) round(($completed / $total) * 100);
-    }
-
     protected static function booted()
     {
         static::saved(function (Control $control) {

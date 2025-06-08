@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ControlResource\RelationManagers;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Enums\Applicability;
 use App\Enums\ControlStatus;
+use App\Filament\Resources\ControlResource;
 use App\Models\Control;
 use Filament\Actions\EditAction;
 use Filament\Forms;
@@ -71,16 +72,8 @@ class SubControlRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return $table
-            ->defaultSort('code', 'asc')
-            ->columns([
-                Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('title')->searchable()->sortable()->wrap(),
-                Tables\Columns\TextColumn::make('status')->badge(),
-                Tables\Columns\TextColumn::make('description')->html()
-                    ->wrap()
-                    ->limit(300)
-            ])
+        return ControlResource::table($table)
+            ->description('If this control has any associated sub-controls, they have to be completed too.')
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->using(function (array $data, RelationManager $livewire) {

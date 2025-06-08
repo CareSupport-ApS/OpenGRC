@@ -11,6 +11,7 @@ use App\Enums\Effectiveness;
 use App\Enums\ControlStatus;
 use App\Filament\Resources\ControlResource\Pages;
 use App\Filament\Resources\ControlResource\RelationManagers;
+use App\Filament\Resources\ControlResource\RelationManagers\SubControlRelationManager;
 use App\Models\Control;
 use App\Models\Standard;
 use Exception;
@@ -22,6 +23,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -155,15 +157,16 @@ class ControlResource extends Resource
                 Tables\Columns\TextColumn::make('standard.name')
                     ->label(__('control.table.columns.standard'))
                     ->wrap()
+                    ->sortable()
+                    ->hiddenOn(SubControlRelationManager::class),
+                TextColumn::make('applicability')
+                    ->label('Applicability')
+                    ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('control.table.columns.status'))
                     ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('LatestAuditDate')
-                    ->label(__('control.table.columns.assessed'))
-                    ->sortable()
-                    ->getStateUsing(fn(Control $record) => $record->getEffectivenessDate()),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('control.table.columns.created_at'))
                     ->dateTime()
