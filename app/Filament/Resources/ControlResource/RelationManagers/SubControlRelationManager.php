@@ -8,11 +8,14 @@ use App\Enums\ControlStatus;
 use App\Models\Control;
 use Filament\Actions\EditAction;
 use Filament\Forms;
+use Filament\Forms\Components\ToggleButtons;
+use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Client\Request;
 
 class SubControlRelationManager extends RelationManager
 {
@@ -22,6 +25,13 @@ class SubControlRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                ToggleButtons::make('status')
+                    ->label('Status')
+                    ->helperText('Updating a status for a subcontrol, will also impact the parent control')
+                    ->options(ControlStatus::class)
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->columnSpanFull()
+                    ->grouped(),
                 Forms\Components\TextInput::make('code')
                     ->required()
                     ->maxLength(255)
@@ -33,12 +43,6 @@ class SubControlRelationManager extends RelationManager
                     ->enum(Applicability::class)
                     ->options(Applicability::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Select the relevance of this standard to your organization.')
-                    ->native(false),
-                Forms\Components\Select::make('status')
-                    ->default(ControlStatus::NOT_STARTED)
-                    ->required()
-                    ->enum(ControlStatus::class)
-                    ->options(ControlStatus::class)
                     ->native(false),
                 Forms\Components\TextInput::make('title')
                     ->required()
@@ -88,7 +92,11 @@ class SubControlRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->hiddenLabel()->slideOver(),
-                Tables\Actions\EditAction::make()->slideOver(),
+                Tables\Actions\EditAction::make()
+                    ->slideOver()
+                    ->after(function (Component $livewire) {
+                        $livewire->dispatch('refresh');
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ]);
     }

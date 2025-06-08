@@ -5,6 +5,8 @@ namespace App\Filament\Resources\ControlResource\Pages;
 use App\Filament\Resources\ControlResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Livewire\Attributes\On;
+
 
 class EditControl extends EditRecord
 {

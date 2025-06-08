@@ -15,6 +15,7 @@ use App\Models\Control;
 use App\Models\Standard;
 use Exception;
 use Filament\Forms;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -67,6 +68,11 @@ class ControlResource extends Resource
         return $form
             ->columns(3)
             ->schema([
+                ToggleButtons::make('status')
+                    ->label('Status')
+                    ->options(ControlStatus::class)
+                    ->default(ControlStatus::NOT_STARTED)
+                    ->grouped(),
                 Forms\Components\TextInput::make('code')
                     ->required()
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.code.tooltip'))
@@ -88,11 +94,6 @@ class ControlResource extends Resource
                     ->searchable()
                     ->preload()
                     ->nullable(),
-                Forms\Components\Select::make('status')
-                    ->options(ControlStatus::class)
-                    ->default(ControlStatus::NOT_STARTED)
-                    ->required()
-                    ->native(false),
                 Forms\Components\Select::make('enforcement')
                     ->options(ControlEnforcementCategory::class)
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: __('control.form.enforcement.tooltip'))
@@ -155,40 +156,14 @@ class ControlResource extends Resource
                     ->label(__('control.table.columns.standard'))
                     ->wrap()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->label(__('control.table.columns.type'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('category')
-                    ->label(__('control.table.columns.category'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('enforcement')
-                    ->label(__('control.table.columns.enforcement'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('LatestAuditEffectiveness')
-                    ->label(__('control.table.columns.effectiveness'))
-                    ->badge()
-                    ->sortable()
-                    ->default(function (Control $record) {
-                        return $record->getEffectiveness();
-                    }),
-                Tables\Columns\TextColumn::make('applicability')
-                    ->label(__('control.table.columns.applicability'))
-                    ->sortable()
-                    ->badge(),
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('control.table.columns.status'))
                     ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('completion_percentage')
-                    ->label(__('control.table.columns.progress'))
-                    ->getStateUsing(fn(Control $record) => $record->completion_percentage.'%')
-                    ->visible(fn(Control $record) => $record->subControls()->count() > 0),
                 Tables\Columns\TextColumn::make('LatestAuditDate')
                     ->label(__('control.table.columns.assessed'))
                     ->sortable()
-                    ->default(function (Control $record) {
-                        return $record->getEffectivenessDate();
-                    }),
+                    ->getStateUsing(fn(Control $record) => $record->getEffectivenessDate()),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('control.table.columns.created_at'))
                     ->dateTime()
@@ -268,7 +243,10 @@ class ControlResource extends Resource
                 Section::make(__('control.infolist.section_title'))
                     ->columns(3)
                     ->schema([
-                        TextEntry::make('title')->columnSpanFull(),
+                        TextEntry::make('status')
+                            ->label(__('control.table.columns.progress'))
+                            ->badge(),
+                        TextEntry::make('title')->columnSpan(2),
                         TextEntry::make('code'),
                         TextEntry::make('effectiveness')
                             ->default(function (Control $record) {
@@ -277,11 +255,6 @@ class ControlResource extends Resource
                         TextEntry::make('type')->badge(),
                         TextEntry::make('category')->badge(),
                         TextEntry::make('enforcement')->badge(),
-                        TextEntry::make('status')->badge(),
-                        TextEntry::make('completion_percentage')
-                            ->label(__('control.table.columns.progress'))
-                            ->default(fn (Control $record) => $record->completion_percentage.'%')
-                            ->visible(fn (Control $record) => $record->subControls()->count() > 0),
                         TextEntry::make('lastAuditDate')
                             ->default(function (Control $record) {
                                 return $record->getEffectivenessDate();
