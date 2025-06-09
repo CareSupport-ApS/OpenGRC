@@ -58,7 +58,7 @@ class BusinessDataEntryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('processable.name')
-                    ->label('System')
+                    ->label('Vendor / system')
                     ->wrap()
                     ->sortable()
                     ->hiddenOn(BusinessDataEntriesRelationManager::class),

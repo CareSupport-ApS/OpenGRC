@@ -13,7 +13,6 @@ class ListPersonalDataEntries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
             Actions\Action::make('export')
                 ->label('Export')
                 ->icon('heroicon-o-arrow-down-tray')
@@ -27,7 +26,7 @@ class ListPersonalDataEntries extends ListRecords
 
         return response()->streamDownload(function () use ($records) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID','Category','Process Name','Purpose','Data Types','Processable Type','Processable ID']);
+            fputcsv($file, ['ID', 'Category', 'Process Name', 'Purpose', 'Data Types', 'Processable Type', 'Processable ID']);
             foreach ($records as $record) {
                 fputcsv($file, [
                     $record->id,

@@ -9,6 +9,7 @@ use App\Filament\Resources\SystemResource\Pages;
 use App\Models\System;
 use App\Models\Vendor;
 use App\Filament\Resources\SystemResource\RelationManagers;
+use App\Filament\Resources\VendorResource\RelationManagers\SystemsRelationManager;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
@@ -54,8 +55,8 @@ class SystemResource extends Resource
                 Forms\Components\Section::make('General Information')
                     ->columns(3)
                     ->schema([
-                        Forms\Components\TextInput::make('title')
-                            ->label(__('system.form.title'))
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('system.form.name'))
                             ->required()
                             ->maxLength(255)
                             ->columnSpan(2),
@@ -101,11 +102,12 @@ class SystemResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->label(__('system.table.columns.title'))
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('system.table.columns.name'))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('vendor.name')
+                    ->hiddenOn(SystemsRelationManager::class)
                     ->label(__('system.table.columns.vendor'))
                     ->sortable()
                     ->toggleable(),
@@ -165,6 +167,6 @@ class SystemResource extends Resource
      */
     public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
     {
-        return $record->title;
+        return $record->name;
     }
 }
