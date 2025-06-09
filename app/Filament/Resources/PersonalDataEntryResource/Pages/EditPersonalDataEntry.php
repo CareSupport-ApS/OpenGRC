@@ -1,9 +1,9 @@
 <?php
 
-namespace App\\Filament\\Resources\\PersonalDataEntryResource\\Pages;
+namespace App\Filament\Resources\PersonalDataEntryResource\Pages;
 
-use App\\Filament\\Resources\\PersonalDataEntryResource;
-use Filament\\Resources\\Pages\\EditRecord;
+use App\Filament\Resources\PersonalDataEntryResource;
+use Filament\Resources\Pages\EditRecord;
 
 class EditPersonalDataEntry extends EditRecord
 {

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\RelationManagers;
 use App\Filament\Resources\PersonalDataEntryResource;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Table;
 
 class PersonalDataEntriesRelationManager extends RelationManager
@@ -18,6 +19,9 @@ class PersonalDataEntriesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return PersonalDataEntryResource::table($table);
+        return PersonalDataEntryResource::table($table)
+            ->headerActions([
+                CreateAction::make(),
+            ]);
     }
 }

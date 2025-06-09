@@ -1,9 +1,9 @@
 <?php
 
-namespace App\\Filament\\Resources\\BusinessDataEntryResource\\Pages;
+namespace App\Filament\Resources\BusinessDataEntryResource\Pages;
 
-use App\\Filament\\Resources\\BusinessDataEntryResource;
-use Filament\\Resources\\Pages\\ViewRecord;
+use App\Filament\Resources\BusinessDataEntryResource;
+use Filament\Resources\Pages\ViewRecord;
 
 class ViewBusinessDataEntry extends ViewRecord
 {

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\RelationManagers;
 use App\Filament\Resources\BusinessDataEntryResource;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Table;
 
 class BusinessDataEntriesRelationManager extends RelationManager
@@ -18,6 +19,9 @@ class BusinessDataEntriesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return BusinessDataEntryResource::table($table);
+        return BusinessDataEntryResource::table($table)
+            ->headerActions([
+                CreateAction::make(),
+            ]);
     }
 }

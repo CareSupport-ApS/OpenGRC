@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\BusinessCriticalDataType;
 use App\Models\BusinessDataEntry;
 use App\Filament\Resources\BusinessDataEntryResource\Pages;
+use App\Filament\Resources\RelationManagers\BusinessDataEntriesRelationManager;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -56,6 +57,11 @@ class BusinessDataEntryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('processable.name')
+                    ->label('System')
+                    ->wrap()
+                    ->sortable()
+                    ->hiddenOn(BusinessDataEntriesRelationManager::class),
                 Tables\Columns\TextColumn::make('process_name')
                     ->label('Process')
                     ->sortable(),
@@ -68,9 +74,7 @@ class BusinessDataEntryResource extends Resource
                     ->wrap(),
             ])
             ->defaultSort('id', 'asc')
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
-            ])
+            ->headerActions([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

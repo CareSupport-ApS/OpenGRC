@@ -6,6 +6,7 @@ use App\Enums\DataSubjectCategory;
 use App\Enums\PersonalDataType;
 use App\Models\PersonalDataEntry;
 use App\Filament\Resources\PersonalDataEntryResource\Pages;
+use App\Filament\Resources\RelationManagers\PersonalDataEntriesRelationManager;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -64,6 +65,11 @@ class PersonalDataEntryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('processable.name')
+                    ->label('System')
+                    ->wrap()
+                    ->sortable()
+                    ->hiddenOn(PersonalDataEntriesRelationManager::class),
                 Tables\Columns\TextColumn::make('subject_category')
                     ->label('Category')
                     ->sortable(),
@@ -73,9 +79,6 @@ class PersonalDataEntryResource extends Resource
                     ->wrap(),
             ])
             ->defaultSort('id', 'asc')
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
-            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
