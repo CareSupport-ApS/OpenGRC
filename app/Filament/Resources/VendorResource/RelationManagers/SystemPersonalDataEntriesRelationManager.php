@@ -19,10 +19,6 @@ class SystemPersonalDataEntriesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return PersonalDataEntryResource::table($table)
-            ->headerActions([
-                CreateAction::make(),
-            ]);
+        return PersonalDataEntryResource::table($table)->paginated(false)->description('Showing personal data processing activities of associated systems');
     }
 }
-

@@ -19,10 +19,6 @@ class SystemBusinessDataEntriesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return BusinessDataEntryResource::table($table)
-            ->headerActions([
-                CreateAction::make(),
-            ]);
+        return BusinessDataEntryResource::table($table)->description('Showing processing activities belonging to associated systems')->paginated(false);;
     }
 }
-
