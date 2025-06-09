@@ -18,15 +18,17 @@ class ImplementationTask extends Model
         'title',
         'status',
         'completion_notes',
-        'task_date',
+        'due_at',
         'attachment_id',
         'recurrence',
     ];
 
+    protected $with = ['implementation'];
+
     protected $casts = [
         'status' => TaskStatus::class,
         'recurrence' => TaskRecurrence::class,
-        'task_date' => 'date',
+        'due_at' => 'date',
     ];
 
     public function implementation(): BelongsTo
@@ -44,7 +46,7 @@ class ImplementationTask extends Model
         static::updated(function (ImplementationTask $task) {
             if ($task->isDirty('status') && $task->status === TaskStatus::COMPLETED) {
                 if ($task->recurrence !== TaskRecurrence::NONE) {
-                    $date = $task->task_date ?? now();
+                    $date = $task->due_at ?? now();
                     $nextDate = match ($task->recurrence) {
                         TaskRecurrence::MONTHLY => Carbon::parse($date)->addMonth(),
                         TaskRecurrence::QUARTERLY => Carbon::parse($date)->addMonths(3),
@@ -60,7 +62,7 @@ class ImplementationTask extends Model
                             'status' => TaskStatus::PENDING,
                             'completion_notes' => null,
                             'attachment_id' => null,
-                            'task_date' => $nextDate,
+                            'due_at' => $nextDate,
                         ])->save();
                     }
                 }

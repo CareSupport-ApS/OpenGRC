@@ -25,7 +25,7 @@ class TasksRelationManager extends RelationManager
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('task_date')
+                Forms\Components\DatePicker::make('due_at')
                     ->label('Due Date')
                     ->required(),
                 Forms\Components\Select::make('recurrence')
@@ -38,27 +38,27 @@ class TasksRelationManager extends RelationManager
                     ->native(false),
                 Forms\Components\Textarea::make('completion_notes')
                     ->columnSpanFull(),
-                Forms\Components\Hidden::make('attachment_id'),
-                Forms\Components\FileUpload::make('attachment')
-                    ->label('Attachment')
-                    ->disk(config('filesystems.default'))
-                    ->directory('task-attachments')
-                    ->visibility('private')
-                    ->preserveFilenames()
-                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, callable $set) {
-                        $path = $file->store('task-attachments', config('filesystems.default'));
-                        $attachment = Attachment::create([
-                            'file_name' => $file->getClientOriginalName(),
-                            'file_path' => $path,
-                            'file_size' => $file->getSize(),
-                            'uploaded_by' => auth()->id(),
-                        ]);
-                        $set('attachment_id', $attachment->id);
-                    })
-                    ->dehydrateStateUsing(fn () => null)
-                    ->downloadable()
-                    ->openable()
-                    ->columnSpanFull(),
+                // Forms\Components\Hidden::make('attachment_id'),
+                // Forms\Components\FileUpload::make('attachment')
+                //     ->label('Attachment')
+                //     ->disk(config('filesystems.default'))
+                //     ->directory('task-attachments')
+                //     ->visibility('private')
+                //     ->preserveFilenames()
+                //     ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, callable $set) {
+                //         $path = $file->store('task-attachments', config('filesystems.default'));
+                //         $attachment = Attachment::create([
+                //             'file_name' => $file->getClientOriginalName(),
+                //             'file_path' => $path,
+                //             'file_size' => $file->getSize(),
+                //             'uploaded_by' => auth()->id(),
+                //         ]);
+                //         $set('attachment_id', $attachment->id);
+                //     })
+                //     ->dehydrateStateUsing(fn () => null)
+                //     ->downloadable()
+                //     ->openable()
+                //     ->columnSpanFull(),
             ]);
     }
 
@@ -67,7 +67,7 @@ class TasksRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')->searchable(),
-                Tables\Columns\TextColumn::make('task_date')->label('Due')->date(),
+                Tables\Columns\TextColumn::make('due_at')->label('Due')->date(),
                 Tables\Columns\TextColumn::make('status')->badge(),
                 Tables\Columns\TextColumn::make('recurrence'),
             ])

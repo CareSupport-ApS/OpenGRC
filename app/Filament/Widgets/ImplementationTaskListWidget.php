@@ -29,7 +29,7 @@ class ImplementationTaskListWidget extends BaseWidget
                     ->limit(100),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
-                Tables\Columns\TextColumn::make('task_date')
+                Tables\Columns\TextColumn::make('due_at')
                     ->label('Due Date'),
             ])
             ->paginated(false);

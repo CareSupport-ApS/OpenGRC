@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('status')->default('Pending');
             $table->text('completion_notes')->nullable();
-            $table->date('task_date')->nullable();
+            $table->date('due_at')->nullable();
             $table->foreignId('attachment_id')->nullable()->constrained('attachments')->nullOnDelete();
             $table->string('recurrence')->default('None');
             $table->timestamps();
