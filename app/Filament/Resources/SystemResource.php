@@ -136,6 +136,7 @@ class SystemResource extends Resource
     {
         return [
             AssetAttachmentsRelationManager::class,
+            RelationManagers\TasksRelationManager::class,
             RelationGroup::make('Data Processing Activities', [
                 BusinessDataEntriesRelationManager::class,
                 PersonalDataEntriesRelationManager::class

@@ -17,7 +17,7 @@ class ToDo extends Page
     public static function getNavigationBadge(): ?string
     {
         $pendingResponses = auth()->user()->openTodos()->count();
-        $pendingTasks     = \App\Models\ImplementationTask::where('status', \App\Enums\TaskStatus::PENDING)->count();
+        $pendingTasks     = \App\Models\Task::where('status', \App\Enums\TaskStatus::PENDING)->count();
 
         $count = $pendingResponses + $pendingTasks;
 

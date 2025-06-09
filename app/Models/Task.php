@@ -7,33 +7,35 @@ use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 
-class ImplementationTask extends Model
+class Task extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'implementation_id',
+        'taskable_id',
+        'taskable_type',
         'title',
         'status',
         'completion_notes',
-        'due_at',
+        'due_date',
         'attachment_id',
         'recurrence',
     ];
 
-    protected $with = ['implementation'];
+    protected $with = ['taskable'];
 
     protected $casts = [
         'status' => TaskStatus::class,
         'recurrence' => TaskRecurrence::class,
-        'due_at' => 'date',
+        'due_date' => 'date',
     ];
 
-    public function implementation(): BelongsTo
+    public function taskable(): MorphTo
     {
-        return $this->belongsTo(Implementation::class);
+        return $this->morphTo();
     }
 
     public function attachment(): BelongsTo
@@ -43,10 +45,10 @@ class ImplementationTask extends Model
 
     protected static function booted(): void
     {
-        static::updated(function (ImplementationTask $task) {
+        static::updated(function (Task $task) {
             if ($task->isDirty('status') && $task->status === TaskStatus::COMPLETED) {
                 if ($task->recurrence !== TaskRecurrence::NONE) {
-                    $date = $task->due_at ?? now();
+                    $date = $task->due_date ?? now();
                     $nextDate = match ($task->recurrence) {
                         TaskRecurrence::MONTHLY => Carbon::parse($date)->addMonth(),
                         TaskRecurrence::QUARTERLY => Carbon::parse($date)->addMonths(3),
@@ -62,7 +64,7 @@ class ImplementationTask extends Model
                             'status' => TaskStatus::PENDING,
                             'completion_notes' => null,
                             'attachment_id' => null,
-                            'due_at' => $nextDate,
+                            'due_date' => $nextDate,
                         ])->save();
                     }
                 }

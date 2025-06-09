@@ -12,6 +12,7 @@ use App\Models\Attachment;
 use App\Models\PersonalDataEntry;
 use App\Models\BusinessDataEntry;
 use App\Models\System;
+use App\Models\Task;
 
 class Vendor extends Model
 {
@@ -59,5 +60,10 @@ class Vendor extends Model
     public function businessDataEntries(): MorphMany
     {
         return $this->morphMany(BusinessDataEntry::class, 'processable');
+    }
+
+    public function tasks(): MorphMany
+    {
+        return $this->morphMany(Task::class, 'taskable');
     }
 }

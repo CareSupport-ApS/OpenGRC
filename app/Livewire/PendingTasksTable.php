@@ -7,7 +7,7 @@ use Filament\Tables;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\ImplementationTask;
+use App\Models\Task;
 use App\Enums\TaskStatus;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -20,7 +20,7 @@ class PendingTasksTable extends Component implements HasTable, HasForms
 
     protected function getTableQuery(): Builder
     {
-        return ImplementationTask::query()
+        return Task::query()
             ->where('status', TaskStatus::PENDING);
     }
 
@@ -28,7 +28,7 @@ class PendingTasksTable extends Component implements HasTable, HasForms
     {
         return [
             Tables\Columns\TextColumn::make('title')->label('Task'),
-            Tables\Columns\TextColumn::make('due_at')->label('Due At')->dateTime(),
+            Tables\Columns\TextColumn::make('due_date')->label('Due At')->dateTime(),
             TextColumn::make('recurrence')->label('Recurrence')->badge(),
             Tables\Columns\TextColumn::make('status')->label('Status')->badge(),
 
@@ -41,8 +41,16 @@ class PendingTasksTable extends Component implements HasTable, HasForms
             Tables\Actions\Action::make('view')
                 ->label('View task')
                 ->url(
-                    fn(ImplementationTask $record) =>
-                    route('filament.app.resources.implementations.view', [$record->implementation,  'activeRelationManager' => 3]),
+                    function (Task $record) {
+                        if ($record->taskable_type === \App\Models\Implementation::class) {
+                            return route('filament.app.resources.implementations.view', [
+                                $record->taskable,
+                                'activeRelationManager' => 3,
+                            ]);
+                        }
+
+                        return '#';
+                    }
                 ),
         ];
     }

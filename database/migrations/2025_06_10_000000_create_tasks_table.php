@@ -8,13 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('implementation_tasks', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('implementation_id')->constrained()->cascadeOnDelete();
+            $table->morphs('taskable');
             $table->string('title');
             $table->string('status')->default('Pending');
             $table->text('completion_notes')->nullable();
-            $table->date('due_at')->nullable();
+            $table->date('due_date')->nullable();
             $table->foreignId('attachment_id')->nullable()->constrained('attachments')->nullOnDelete();
             $table->string('recurrence')->default('None');
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('implementation_tasks');
+        Schema::dropIfExists('tasks');
     }
 };

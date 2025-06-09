@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Attachment;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\ImplementationTask;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -154,8 +154,8 @@ class Implementation extends Model
     /**
      * Get the tasks for the implementation.
      */
-    public function tasks(): HasMany
+    public function tasks(): MorphMany
     {
-        return $this->hasMany(ImplementationTask::class);
+        return $this->morphMany(Task::class, 'taskable');
     }
 }
