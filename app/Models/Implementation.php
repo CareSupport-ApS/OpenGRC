@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Attachment;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\ImplementationTask;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -147,5 +149,13 @@ class Implementation extends Model
     public function attachments(): MorphMany
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    /**
+     * Get the tasks for the implementation.
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(ImplementationTask::class);
     }
 }

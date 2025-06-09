@@ -4,6 +4,8 @@ namespace App\Filament\Pages;
 
 use App\Enums\ResponseStatus;
 use App\Models\DataRequestResponse;
+use App\Models\ImplementationTask;
+use App\Enums\TaskStatus;
 use Filament\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -26,7 +28,7 @@ class ToDo extends Page implements Tables\Contracts\HasTable
 
     public static function getNavigationBadge(): ?string
     {
-        $count = auth()->user()->openTodos()->count();
+        $count = auth()->user()->openTodos()->count() + \App\Models\ImplementationTask::where('status', \App\Enums\TaskStatus::PENDING)->count();
 
         if ($count > 99) {
             return '99+';
