@@ -10,6 +10,11 @@ class ViewSystem extends ViewRecord
 {
     protected static string $resource = SystemResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

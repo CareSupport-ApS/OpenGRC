@@ -18,6 +18,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -140,9 +141,9 @@ class ImplementationResource extends Resource
                     ->toggleable()
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('tasks')
-                    ->label(__('implementation.table.columns.tasks'))
-                    ->getStateUsing(fn($record) => $record->tasksCount()),
+                TextColumn::make('tasks_count')
+                    ->label('Tasks')
+                    ->counts('tasks'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('implementation.table.columns.created_at'))
                     ->dateTime()
@@ -264,5 +265,4 @@ class ImplementationResource extends Resource
     {
         return ['title', 'details', 'notes'];
     }
-
 }
