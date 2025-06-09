@@ -6,6 +6,8 @@ use App\Enums\VendorType;
 use App\Filament\Resources\RelationManagers\AssetAttachmentsRelationManager;
 use App\Filament\Resources\RelationManagers\BusinessDataEntriesRelationManager;
 use App\Filament\Resources\RelationManagers\PersonalDataEntriesRelationManager;
+use App\Filament\Resources\VendorResource\RelationManagers\SystemBusinessDataEntriesRelationManager;
+use App\Filament\Resources\VendorResource\RelationManagers\SystemPersonalDataEntriesRelationManager;
 use App\Filament\Resources\VendorResource\Pages;
 use App\Filament\Resources\VendorResource\RelationManagers;
 use App\Models\Vendor;
@@ -143,8 +145,10 @@ class VendorResource extends Resource
             RelationManagers\TasksRelationManager::class,
             AssetAttachmentsRelationManager::class,
             RelationGroup::make('Data Processing Activities', [
+                RelationManagers\SystemBusinessDataEntriesRelationManager::class,
+                RelationManagers\SystemPersonalDataEntriesRelationManager::class,
                 BusinessDataEntriesRelationManager::class,
-                PersonalDataEntriesRelationManager::class
+                PersonalDataEntriesRelationManager::class,
             ]),
 
         ];

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use App\Models\Attachment;
 use App\Models\PersonalDataEntry;
 use App\Models\BusinessDataEntry;
@@ -65,5 +66,25 @@ class Vendor extends Model
     public function tasks(): MorphMany
     {
         return $this->morphMany(Task::class, 'taskable');
+    }
+
+    public function systemPersonalDataEntries(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            PersonalDataEntry::class,
+            System::class,
+            'vendor_id',
+            'processable_id'
+        )->where('personal_data_entries.processable_type', System::class);
+    }
+
+    public function systemBusinessDataEntries(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            BusinessDataEntry::class,
+            System::class,
+            'vendor_id',
+            'processable_id'
+        )->where('business_data_entries.processable_type', System::class);
     }
 }
