@@ -165,11 +165,10 @@ class ControlResource extends Resource
                     ->label('Applicability')
                     ->badge()
                     ->sortable(),
-                SelectColumn::make('status')
+                TextColumn::make('status')
                     ->label('Status')
-                    ->options(ControlStatus::class)
-                    ->default(ControlStatus::NOT_STARTED),
-
+                    ->badge()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('control.table.columns.created_at'))
                     ->dateTime()
