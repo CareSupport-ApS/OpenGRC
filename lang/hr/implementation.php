@@ -15,7 +15,6 @@ return [
             'description' => 'Pokušajte kreirati novu implementaciju klikom na gumb "Kreiraj Implementaciju" iznad.',
         ],
         'columns' => [
-            'code' => 'Kod',
             'title' => 'Naslov',
             'effectiveness' => 'Učinkovitost',
             'last_assessed' => 'Zadnja Revizija',

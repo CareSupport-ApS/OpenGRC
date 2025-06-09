@@ -140,9 +140,7 @@ class CreateAudit extends CreateRecord
                                 } elseif ($audit_type == 'implementations') {
                                     $controls = Implementation::query()
                                         ->get()
-                                        ->mapWithKeys(function ($implementation) {
-                                            return [$implementation->id => $implementation->code . ' - ' . $implementation->title];
-                                        })
+                                        ->mapWithKeys(fn($implementation) => [$implementation->id => $implementation->title])
                                         ->toArray();
                                 } elseif ($audit_type == 'program') {
                                     $program_id = $get('program_id');

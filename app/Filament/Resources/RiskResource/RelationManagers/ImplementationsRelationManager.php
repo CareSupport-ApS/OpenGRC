@@ -14,12 +14,12 @@ class ImplementationsRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return ImplementationResource::getForm($form);
+        return ImplementationResource::form($form);
     }
 
     public function table(Table $table): Table
     {
-        $table = ImplementationResource::getTable($table);
+        $table = ImplementationResource::table($table);
         $table->actions([
             Tables\Actions\ViewAction::make()->hidden(),
         ]);

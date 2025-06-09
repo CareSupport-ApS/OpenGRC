@@ -72,7 +72,6 @@ class StandardControlImplementationTest extends TestCase
                 // Create 10 implementations for each control
                 for ($j = 1; $j <= 10; $j++) {
                     $implementation = Implementation::create([
-                        'code' => "IMPL-{$s}-{$i}-{$j}",
                         'title' => "Implementation {$j} for Control {$s}-{$i}",
                         'details' => "Detailed implementation steps for Control {$s}-{$i}, Implementation {$j}",
                         'notes' => "Internal notes for Implementation {$j} of Standard {$s}",
@@ -84,7 +83,7 @@ class StandardControlImplementationTest extends TestCase
                     $control->implementations()->attach($implementation->id);
 
                     $this->assertDatabaseHas('implementations', [
-                        'code' => "IMPL-{$s}-{$i}-{$j}",
+                        'title' => "Implementation {$j} for Control {$s}-{$i}",
                     ]);
 
                     $this->assertDatabaseHas('control_implementation', [

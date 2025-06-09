@@ -15,7 +15,6 @@ return [
             'description' => 'Try creating a new implementation by clicking the "Create Implementation" button above.',
         ],
         'columns' => [
-            'code' => 'Code',
             'title' => 'Title',
             'effectiveness' => 'Effectiveness',
             'last_assessed' => 'Last Audit',
