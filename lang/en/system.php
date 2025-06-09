@@ -10,7 +10,7 @@ return [
         'plural_label' => 'Systems',
     ],
     'form' => [
-        'title' => 'Title',
+        'name' => 'Name',
         'vendor' => 'Vendor',
         'description' => 'Description',
         'system_document_link' => 'System Documentation Link',
@@ -20,7 +20,7 @@ return [
     ],
     'table' => [
         'columns' => [
-            'title' => 'Title',
+            'name' => 'Name',
             'vendor' => 'Vendor',
             'security_password_policy_compliant' => 'Password Policy',
             'security_sso_connected' => 'SSO',

@@ -14,7 +14,7 @@ class SystemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'systems';
 
-    protected static ?string $recordTitleAttribute = 'title';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public function form(Form $form): Form
     {
@@ -24,8 +24,8 @@ class SystemsRelationManager extends RelationManager
                 Forms\Components\Section::make('General Information')
                     ->columns(3)
                     ->schema([
-                        Forms\Components\TextInput::make('title')
-                            ->label(__('system.form.title'))
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('system.form.name'))
                             ->required()
                             ->maxLength(255)
                             ->columnSpan(2),
@@ -68,8 +68,8 @@ class SystemsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->label(__('system.table.columns.title'))
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('system.table.columns.name'))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('security_password_policy_compliant')
