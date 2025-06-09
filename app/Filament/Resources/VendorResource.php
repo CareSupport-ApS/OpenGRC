@@ -142,6 +142,7 @@ class VendorResource extends Resource
     {
         return [
             RelationManagers\SystemsRelationManager::class,
+            RelationManagers\TasksRelationManager::class,
             AssetAttachmentsRelationManager::class,
             RelationGroup::make('Data Processing Activities', [
                 RelationManagers\SystemBusinessDataEntriesRelationManager::class,
