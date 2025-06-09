@@ -10,6 +10,11 @@ class EditVendor extends EditRecord
 {
     protected static string $resource = VendorResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

@@ -153,7 +153,6 @@ class DemoSeeder extends Seeder
         $implementationsData = [
 
             'IMPL-L1' => [
-                'code' => 'IMPL-L1',
                 'title' => 'EDR Deployment on Workstations',
                 'details' => 'Enterprise Detection and Response (EDR) tool, specifically Microsoft Defender, is deployed across all workstations within the organization. Configuration settings are optimized for maximum detection efficiency and minimal performance impact. Continuous monitoring and automatic updates are enabled to ensure up-to-date protection against emerging threats.',
                 'notes' => 'Currently, Microsoft Defender is deployed on all Windows workstations through Group Policy Object (GPO). However, the implementation does not yet cover servers and Linux machines. A plan is needed to extend EDR coverage to these systems, ensuring comprehensive protection across the entire network. Additionally, compatibility and deployment strategies for non-Windows systems need to be developed.',
@@ -161,7 +160,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L2' => [
-                'code' => 'IMPL-L2',
                 'title' => 'Data Encryption',
                 'details' => 'All sensitive data stored on company servers and transmitted over the network is encrypted using AES-256 encryption standards. Encryption keys are managed through a centralized key management system with strict access controls.',
                 'notes' => 'Data encryption is fully implemented for data at rest. Work is ongoing to ensure encryption for data in transit across all platforms. Key rotation policy needs to be established and automated.',
@@ -169,7 +167,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L3' => [
-                'code' => 'IMPL-L3',
                 'title' => 'Security Audits',
                 'details' => 'Quarterly security audits are conducted by an internal team, supplemented by an annual audit performed by an external agency. The focus is on network security, policy compliance, and incident response readiness.',
                 'notes' => 'Internal audit processes are well-established. Need to finalize the contract with the external agency for annual audits. Also, integrating audit findings into continuous improvement processes is in progress.',
@@ -177,7 +174,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L4' => [
-                'code' => 'IMPL-L4',
                 'title' => 'Incident Response Plan',
                 'details' => 'A detailed incident response plan has been developed, covering a range of potential scenarios. Regular training and simulated incident response exercises are conducted to ensure preparedness.',
                 'notes' => 'The plan is currently being reviewed for updates based on recent threat landscape changes. Need to schedule the next round of simulation exercises for the new team members.',
@@ -185,7 +181,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L5' => [
-                'code' => 'IMPL-L5',
                 'title' => 'Access Management',
                 'details' => 'Access management is enforced using a centralized identity management system. Regular audits are performed to ensure adherence to the least privilege principle and to update access rights based on role changes.',
                 'notes' => 'Implementation of the new identity management system is ongoing. Transition from the old system requires careful handling of legacy data and access rights.',
@@ -193,7 +188,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L6' => [
-                'code' => 'IMPL-L6',
                 'title' => 'Cybersecurity Awareness Training',
                 'details' => 'All employees undergo mandatory cybersecurity awareness training upon onboarding, with annual refresher courses. The training program includes modules on phishing, secure password practices, and secure internet usage.',
                 'notes' => 'The training curriculum is currently being updated to include recent cybersecurity trends and threats. Additionally, exploring options for more interactive and engaging training methods.',
@@ -201,7 +195,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L7' => [
-                'code' => 'IMPL-L7',
                 'title' => 'Network Layered Defense',
                 'details' => 'Network architecture includes layered defenses with firewalls, IDS/IPS, and segregated network zones. Regular reviews and updates are conducted to ensure the architecture aligns with current threat intelligence.',
                 'notes' => 'Recent network expansion has introduced new challenges in maintaining segmentation. An audit of the current network setup is planned to identify potential improvements.',
@@ -209,7 +202,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L8' => [
-                'code' => 'IMPL-L8',
                 'title' => 'Vulnerability Scanning and Patch Management',
                 'details' => 'Vulnerability scanning is conducted bi-weekly, with immediate action on critical vulnerabilities. Patch management is automated for standard software and manually reviewed for critical systems.',
                 'notes' => 'Integrating newer scanning tools to cover cloud and containerized environments. Need to streamline patch management for quicker response.',
@@ -217,7 +209,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L9' => [
-                'code' => 'IMPL-L9',
                 'title' => 'MFA Enforcement',
                 'details' => 'MFA is enforced for access to all internal systems and cloud services. The implementation includes a combination of hardware tokens, SMS, and mobile app authentication.',
                 'notes' => 'User adoption of MFA has been successful, but there are ongoing challenges with hardware token distribution for remote workers. Exploring more scalable solutions.',
@@ -225,7 +216,6 @@ class DemoSeeder extends Seeder
             ],
 
             'IMPL-L10' => [
-                'code' => 'IMPL-L10',
                 'title' => 'Third-Party Risk Management',
                 'details' => 'A third-party risk management program is established, including regular security assessments of vendors and incorporation of security clauses in vendor contracts.',
                 'notes' => 'Currently updating the risk assessment framework to include newer types of third-party services. Need to work on improving the contract negotiation process for better security alignment.',
@@ -255,8 +245,8 @@ class DemoSeeder extends Seeder
 
             // Insert Implementations
             $implementationModels = [];
-            foreach ($implementationsData as $implementationData) {
-                $implementationModels[$implementationData['code']] = Implementation::create($implementationData);
+            foreach ($implementationsData as $key => $implementationData) {
+                $implementationModels[$key] = Implementation::create($implementationData);
             }
 
             // Establish Relationships

@@ -15,11 +15,11 @@ return [
             'description' => 'Essayez de créer une nouvelle implémentation en cliquant sur le bouton "Créer une Implémentation" ci-dessus.',
         ],
         'columns' => [
-            'code' => 'Code',
             'title' => 'Titre',
             'effectiveness' => 'Efficacité',
             'last_assessed' => 'Dernier Audit',
             'status' => 'Statut',
+            'tasks' => 'Tâches',
             'created_at' => 'Créé Le',
             'updated_at' => 'Mis à Jour Le',
         ],

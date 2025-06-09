@@ -15,7 +15,6 @@ class ImplementationFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => $this->faker->word(),
             'title' => $this->faker->word(),
             'details' => $this->faker->text(),
             'status' => $this->faker->randomElement(ImplementationStatus::class),

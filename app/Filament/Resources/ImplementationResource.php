@@ -18,6 +18,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -54,15 +55,6 @@ class ImplementationResource extends Resource
         return $form
             ->columns(3)
             ->schema([
-                Forms\Components\TextInput::make('code')
-                    ->maxLength(255)
-                    ->required()
-                    ->unique(Implementation::class, 'code', ignoreRecord: true)
-                    ->live()
-                    ->afterStateUpdated(function (Forms\Contracts\HasForms $livewire, Forms\Components\TextInput $component) {
-                        $livewire->validateOnly($component->getStatePath());
-                    })
-                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Enter a unique code for this implementation. This code will be used to identify this implementation in the system.'),
                 Forms\Components\Select::make('status')
                     ->required()
                     ->label('Implementation Status')
@@ -82,7 +74,7 @@ class ImplementationResource extends Resource
                     )
                     ->searchable()
                     ->multiple()
-                    ->placeholder('Select related controls') // Optional: Adds a placeholder
+                    ->placeholder('Select related controls')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: "All implementations should relate to a control. If you don't have a relevant control in place, consider creating a new one first."),
                 Forms\Components\TextInput::make('title')
                     ->maxLength(255)
@@ -129,11 +121,6 @@ class ImplementationResource extends Resource
             ->emptyStateHeading(__('implementation.table.empty_state.heading'))
             ->emptyStateDescription(__('implementation.table.empty_state.description'))
             ->columns([
-                Tables\Columns\TextColumn::make('code')
-                    ->label(__('implementation.table.columns.code'))
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label(__('implementation.table.columns.title'))
                     ->toggleable()
@@ -154,6 +141,9 @@ class ImplementationResource extends Resource
                     ->toggleable()
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('tasks_count')
+                    ->label('Tasks')
+                    ->counts('tasks'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('implementation.table.columns.created_at'))
                     ->dateTime()
@@ -198,9 +188,8 @@ class ImplementationResource extends Resource
             ->schema([
                 Section::make('Details')
                     ->schema([
-                        TextEntry::make('code')
+                        TextEntry::make('title')
                             ->columnSpan(2)
-                            ->getStateUsing(fn($record) => "$record->code - $record->title")
                             ->label('Title'),
                         TextEntry::make('effectiveness')
                             ->getStateUsing(fn($record) => $record->getEffectiveness())
@@ -251,7 +240,7 @@ class ImplementationResource extends Resource
      */
     public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
     {
-        return "$record->code - $record->title";
+        return $record->title;
     }
 
     /**
@@ -274,112 +263,6 @@ class ImplementationResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['title', 'details', 'notes', 'code'];
-    }
-
-    public static function getForm(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('code')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder('e.g. ACME-123')
-                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Give the implementation a unique ID or Code.'),
-                Forms\Components\Select::make('status')
-                    ->required()
-                    ->enum(ImplementationStatus::class)
-                    ->options(ImplementationStatus::class)
-                    ->default(ImplementationStatus::UNKNOWN)
-                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Select an implementation status. This will also be assessed in audits.')
-                    ->native(false),
-                Forms\Components\TextInput::make('title')
-                    ->columnSpanFull()
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder('e.g. Quarterly Access Reviews')
-                    ->hint('Enter the title of the implementation.')
-                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'This should be a detailed description of this implementation in sufficient detail to both implement and test.'),
-                Forms\Components\RichEditor::make('details')
-                    ->columnSpanFull()
-                    ->disableToolbarButtons([
-                        'image',
-                        'attachFiles'
-                    ])
-                    ->label('Implementation Details')
-                    ->required()
-                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'This should be a detailed description of this implementation in sufficient detail to both implement and test.'),
-                Forms\Components\RichEditor::make('notes')
-                    ->columnSpanFull()
-                    ->disableToolbarButtons([
-                        'image',
-                        'attachFiles'
-                    ])
-                    ->label('Internal Notes')
-                    ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'These notes are for internal use only and will not be shared with auditors.')
-                    ->maxLength(4096),
-            ]);
-    }
-
-    public static function getTable(Table $table): Table
-    {
-        return $table
-            ->recordTitleAttribute('details')
-            ->columns([
-                Tables\Columns\TextColumn::make('code')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('title')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('effectiveness')
-                    ->getStateUsing(function ($record) {
-                        return $record->getEffectiveness();
-                    })
-                    ->badge(),
-                Tables\Columns\TextColumn::make('last_assessed')
-                    ->label('Last Audit')
-                    ->getStateUsing(fn($record) => $record->getEffectivenessDate() ? $record->getEffectivenessDate() : 'Not yet audited')
-                    ->badge(),
-                Tables\Columns\TextColumn::make('status')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                SelectFilter::make('status')->options(ImplementationStatus::class),
-                SelectFilter::make('effectiveness')
-                    ->options(Effectiveness::class)
-                    ->query(function (Builder $query, array $data) {
-                        if (! isset($data['value'])) {
-                            return $query;
-                        }
-
-                        return $query->whereHas('auditItems', function ($q) use ($data) {
-                            $q->where('effectiveness', $data['value']);
-                        });
-                    }),
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
+        return ['title', 'details', 'notes'];
     }
 }
