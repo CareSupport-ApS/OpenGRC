@@ -9,6 +9,7 @@ use App\Filament\Resources\SystemResource\Pages;
 use App\Models\System;
 use App\Models\Vendor;
 use App\Filament\Resources\SystemResource\RelationManagers;
+use App\Filament\Resources\VendorResource\RelationManagers\SystemsRelationManager;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
@@ -106,6 +107,7 @@ class SystemResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('vendor.name')
+                    ->hiddenOn(SystemsRelationManager::class)
                     ->label(__('system.table.columns.vendor'))
                     ->sortable()
                     ->toggleable(),

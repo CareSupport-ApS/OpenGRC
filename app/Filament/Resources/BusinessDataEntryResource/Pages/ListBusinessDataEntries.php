@@ -13,7 +13,6 @@ class ListBusinessDataEntries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
             Actions\Action::make('export')
                 ->label('Export')
                 ->icon('heroicon-o-arrow-down-tray')
