@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Enums\Applicability;
+use Filament\Tables\Columns\ToggleColumn;
 use App\Enums\ControlCategory;
 use App\Enums\ControlEnforcementCategory;
 use App\Enums\ControlType;
@@ -23,6 +24,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -163,8 +165,8 @@ class ControlResource extends Resource
                     ->label('Applicability')
                     ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->label(__('control.table.columns.status'))
+                TextColumn::make('status')
+                    ->label('Status')
                     ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

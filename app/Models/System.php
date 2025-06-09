@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Attachment;
 use App\Models\PersonalDataEntry;
 use App\Models\BusinessDataEntry;
+use App\Models\Task;
 
 class System extends Model
 {
@@ -37,5 +38,10 @@ class System extends Model
     public function businessDataEntries(): MorphMany
     {
         return $this->morphMany(BusinessDataEntry::class, 'processable');
+    }
+
+    public function tasks(): MorphMany
+    {
+        return $this->morphMany(Task::class, 'taskable');
     }
 }

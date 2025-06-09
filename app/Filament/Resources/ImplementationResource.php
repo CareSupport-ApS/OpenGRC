@@ -6,6 +6,7 @@ use App\Enums\Effectiveness;
 use App\Enums\ImplementationStatus;
 use App\Filament\Resources\ImplementationResource\Pages;
 use App\Filament\Resources\ImplementationResource\RelationManagers;
+use App\Filament\Resources\ImplementationResource\RelationManagers\TasksRelationManager;
 use App\Filament\Resources\RelationManagers\AssetAttachmentsRelationManager;
 use App\Models\Control;
 use App\Models\Implementation;
@@ -210,6 +211,7 @@ class ImplementationResource extends Resource
             RelationManagers\ControlsRelationManager::class,
             RelationManagers\AuditItemRelationManager::class,
             RelationManagers\RisksRelationManager::class,
+            RelationManagers\TasksRelationManager::class,
             AssetAttachmentsRelationManager::class,
         ];
     }

@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\DataRequestResponse;
 use App\Models\Attachment;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -150,11 +152,11 @@ class Implementation extends Model
         return $this->morphMany(Attachment::class, 'attachable');
     }
 
-    public function tasksCount(): int
+    /**
+     * Get the tasks for the implementation.
+     */
+    public function tasks(): MorphMany
     {
-        return DataRequestResponse::whereHas('dataRequest.auditItem', function ($query) {
-            $query->where('auditable_type', self::class)
-                ->where('auditable_id', $this->id);
-        })->count();
+        return $this->morphMany(Task::class, 'taskable');
     }
 }
