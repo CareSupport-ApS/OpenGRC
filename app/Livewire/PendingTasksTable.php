@@ -48,6 +48,19 @@ class PendingTasksTable extends Component implements HasTable, HasForms
                                 'activeRelationManager' => 3,
                             ]);
                         }
+                        if ($record->taskable_type === \App\Models\Vendor::class) {
+                            return route('filament.app.resources.vendors.view', [
+                                $record->taskable,
+                                'activeRelationManager' => 1,
+                            ]);
+                        }
+
+                        if ($record->taskable_type === \App\Models\System::class) {
+                            return route('filament.app.resources.systems.view', [
+                                $record->taskable,
+                                'activeRelationManager' => 1,
+                            ]);
+                        }
 
                         return '#';
                     }
