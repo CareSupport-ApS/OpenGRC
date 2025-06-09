@@ -19,11 +19,11 @@ class ImplementationsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        $table = ImplementationResource::table($table);
-        $table->actions([
-            Tables\Actions\ViewAction::make()->hidden(),
-        ]);
-
-        return $table;
+        return ImplementationResource::table($table)
+            ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->hiddenLabel()
+                    ->url(fn($record) => ImplementationResource::getUrl('view', ['record' => $record])),
+            ]);
     }
 }

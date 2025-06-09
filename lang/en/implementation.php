@@ -19,6 +19,7 @@ return [
             'effectiveness' => 'Effectiveness',
             'last_assessed' => 'Last Audit',
             'status' => 'Status',
+            'tasks' => 'Tasks',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ],

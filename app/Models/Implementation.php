@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\DataRequestResponse;
 use App\Models\Attachment;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
@@ -147,5 +148,13 @@ class Implementation extends Model
     public function attachments(): MorphMany
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    public function tasksCount(): int
+    {
+        return DataRequestResponse::whereHas('dataRequest.auditItem', function ($query) {
+            $query->where('auditable_type', self::class)
+                ->where('auditable_id', $this->id);
+        })->count();
     }
 }

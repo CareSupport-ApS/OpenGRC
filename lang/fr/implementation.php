@@ -19,6 +19,7 @@ return [
             'effectiveness' => 'Efficacité',
             'last_assessed' => 'Dernier Audit',
             'status' => 'Statut',
+            'tasks' => 'Tâches',
             'created_at' => 'Créé Le',
             'updated_at' => 'Mis à Jour Le',
         ],

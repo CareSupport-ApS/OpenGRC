@@ -139,6 +139,9 @@ class ImplementationResource extends Resource
                     ->toggleable()
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('tasks')
+                    ->label(__('implementation.table.columns.tasks'))
+                    ->getStateUsing(fn($record) => $record->tasksCount()),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('implementation.table.columns.created_at'))
                     ->dateTime()

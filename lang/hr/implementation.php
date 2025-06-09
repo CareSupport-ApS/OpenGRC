@@ -19,6 +19,7 @@ return [
             'effectiveness' => 'Učinkovitost',
             'last_assessed' => 'Zadnja Revizija',
             'status' => 'Status',
+            'tasks' => 'Zadaci',
             'created_at' => 'Kreirano',
             'updated_at' => 'Ažurirano',
         ],

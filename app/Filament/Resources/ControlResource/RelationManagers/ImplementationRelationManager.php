@@ -37,7 +37,9 @@ class ImplementationRelationManager extends RelationManager
                     ->recordSelectSearchColumns(['title']),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->hiddenLabel()
+                    ->url(fn($record) => ImplementationResource::getUrl('view', ['record' => $record])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
